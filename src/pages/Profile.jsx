@@ -37,7 +37,7 @@ const Profile = () => {
     <div className="container mx-auto">
       <div className="flex flex-col justify-center items-center">
         <div className="flex">
-          <h1 className="text-3xl font-bold">My profile</h1>
+          <h1 className="text-3xl font-bold">{`${name}'s profile`}</h1>
           <button onClick={onLogout} className="btn btn-secondary btn-outline">Logout</button>
         </div>
         <div>
