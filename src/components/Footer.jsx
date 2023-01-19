@@ -23,7 +23,7 @@ const Footer = () => {
         <div>
           <span className="footer-title">Social</span>
           <div className="grid grid-flow-col gap-4">
-            <a>
+            <a href='#'>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"

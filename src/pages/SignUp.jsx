@@ -1,16 +1,15 @@
-// import Link from 'next/link'
 import { useState } from 'react'
-// import {
-//   getAuth,
-//   createUserWithEmailAndPassword,
-//   updateProfile,
-// } from 'firebase/auth'
-// import { db } from '../firebase.config'
-// import { setDoc, doc, serverTimestamp } from 'firebase/firestore'
-// import { useRouter } from 'next/router'
+import { Link, useNavigate } from 'react-router-dom'
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth'
+import { db } from '../firebase.config'
+import { setDoc, doc, serverTimestamp } from 'firebase/firestore'
 
 const SignUp = () => {
-//   const router = useRouter()
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -30,27 +29,21 @@ const SignUp = () => {
     e.preventDefault()
 
     try {
-    //   const auth = getAuth()
-
-    //   const userCredential = await createUserWithEmailAndPassword(
-    //     auth,
-    //     email,
-    //     password
-    //   )
-
-    //   const user = userCredential.user
-
-    //   updateProfile(auth.currentUser, {
-    //     displayName: name,
-    //   })
-
-    //   const formDataCopy = { ...formData }
-    //   delete formDataCopy.password
-    //   formDataCopy.timestamp = serverTimestamp()
-
-    //   await setDoc(doc(db, 'users', user.uid), formDataCopy)
-
-    //   router.replace('/')
+        const auth = getAuth()
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        )
+        const user = userCredential.user
+        updateProfile(auth.currentUser, {
+          displayName: name,
+        })
+        const formDataCopy = { ...formData }
+        delete formDataCopy.password
+        formDataCopy.timestamp = serverTimestamp()
+        await setDoc(doc(db, 'users', user.uid), formDataCopy)
+      navigate('/')
     } catch (error) {
       console.log(error)
       alert('Something went wrong with registration.')
@@ -103,9 +96,9 @@ const SignUp = () => {
       </form>
       <div className="flex justify-center items-center space-x-3 mt-3">
         <h2 className="text-2xl">Already a Member?</h2>
-        {/* <Link href="/Login">
+        <Link href="/Login">
           <button className="btn btn-accent">Click Here</button>
-        </Link> */}
+        </Link>
       </div>
     </>
   )

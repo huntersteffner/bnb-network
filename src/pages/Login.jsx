@@ -1,10 +1,9 @@
-// import Link from 'next/link'
 import { useState } from 'react'
-// import { useRouter } from 'next/router'
-// import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { Link, useNavigate } from 'react-router-dom'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 
 const Login =() => {
-    // const router = useRouter()
+    const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
     email: '',
@@ -23,17 +22,17 @@ const Login =() => {
     e.preventDefault()
 
     try {
-    //   const auth = getAuth()
+      const auth = getAuth()
 
-    //   const userCredential = await signInWithEmailAndPassword(
-    //     auth,
-    //     email,
-    //     password
-    //   )
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      )
 
-    //   if (userCredential.user) {
-    //     // router.replace('/')
-    //   }
+      if (userCredential.user) {
+        navigate('/')
+      }
     } catch (error) {
       alert('Bad user credentials')
       console.log(error)
@@ -62,9 +61,9 @@ const Login =() => {
       
       <div className="flex justify-center items-center space-x-3 mt-3">
         <h2 className="text-2xl">Not a member?</h2>
-        {/* <Link href="/SignUp">
+        <Link href="/SignUp">
           <button className="btn btn-accent">Click Here</button>
-        </Link> */}
+        </Link>
       </div>
     </>
     )

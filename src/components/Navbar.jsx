@@ -1,4 +1,4 @@
-// import Link from 'next/link'
+import { Link } from 'react-router-dom'
 
 const Navbar = () => {
   // jsx pulled from https://daisyui.com/components/navbar/
@@ -26,15 +26,9 @@ const Navbar = () => {
             tabIndex={0}
             className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
           >
-            <li>
-              {/* <Link href="/">Explore</Link> */}
-            </li>
-            <li>
-              {/* <Link href="/History">My History</Link> */}
-            </li>
-            <li>
-              {/* <Link href="/Profile">My Profile</Link> */}
-            </li>
+            <li><Link to='/'>Explore</Link></li>
+            <li><Link to='/history'>My History</Link></li>
+            <li><Link to='/profile'>My Profile</Link></li>
           </ul>
         </div>
       </div>

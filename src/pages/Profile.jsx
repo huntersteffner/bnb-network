@@ -1,33 +1,32 @@
-// import Link from 'next/link'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-// import { getAuth, updateProfile } from 'firebase/auth'
-// import {
-//   updateDoc,
-//   doc,
-//   collection,
-//   getDocs,
-//   query,
-//   where,
-//   orderBy,
-//   deleteDoc,
-// } from 'firebase/firestore'
-// import { db } from '../firebase.config'
-// import { useRouter } from 'next/router'
+import { getAuth, updateProfile } from 'firebase/auth'
+import {
+  updateDoc,
+  doc,
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  deleteDoc,
+} from 'firebase/firestore'
+import { db } from '../firebase.config'
 
 
 const Profile = () => {
-//   const router = useRouter()
+    const navigate = useNavigate()
 
-//   const auth = getAuth()
-  // const [loading, setLoading] = useState(true)
+  const auth = getAuth()
+  const [loading, setLoading] = useState(true)
   const [listings, setListings] = useState(null)
   const [changeDetails, setChangeDetails] = useState(false)
-//   const [formData, setFormData] = useState({
-//     name: auth.currentUser.displayName,
-//     email: auth.currentUser.email,
-//   })
+  const [formData, setFormData] = useState({
+    name: auth.currentUser.displayName,
+    email: auth.currentUser.email,
+  })
   
-//   const { name, email } = formData
+  const { name, email } = formData
   return (
     <div className="container mx-auto">
       <div className="flex flex-col justify-center items-center">
@@ -50,9 +49,9 @@ const Profile = () => {
           </div>
           <div className="flex justify-center items-center">
             <p>See complete trip history</p>
-            {/* <Link href="/History">
+            <Link to="/history">
               <button className="btn btn-primary">Click Here</button>
-            </Link> */}
+            </Link>
           </div>
         </div>
         <div>

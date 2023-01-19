@@ -1,16 +1,30 @@
-import Footer from "./components/Footer"
-import Navbar from "./components/Navbar"
-import Login from "./pages/Login"
-import SignUp from "./pages/SignUp"
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+
+import Footer from './components/Footer'
+import Navbar from './components/Navbar'
+import Explore from './pages/Explore'
+import History from './pages/History'
+import Location from './pages/Location'
+import Login from './pages/Login'
+import Profile from './pages/Profile'
+import SignUp from './pages/SignUp'
 
 function App() {
   return (
-    <div className="App">
-      <Navbar/>
-      <Login/>
-      <SignUp/>
-      <Footer/>
-    </div>
+    <>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/history" element={<History />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/location" element={<Location />} />
+          <Route path="/explore" element={<Explore />} />
+        </Routes>
+        <Footer />
+      </Router>
+    </>
   )
 }
 
