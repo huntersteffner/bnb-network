@@ -10,13 +10,16 @@
 
 # production
 /build
-
+.env
 # misc
 .DS_Store
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+
+# firebase file for now
+/src/firebase.config.js
 
 npm-debug.log*
 yarn-debug.log*
