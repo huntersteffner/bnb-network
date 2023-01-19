@@ -1,5 +1,4 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from './logo.svg'
 
 function App() {
   return (
@@ -17,9 +16,12 @@ function App() {
         >
           Learn React
         </a>
+        <p className='text-red-300'>Hello</p>
       </header>
+      <p className='text-3xl'>Hello</p>
+      <button className="btn btn-ghost">Hello</button>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
