@@ -13,9 +13,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Loading from '../components/Loading'
 
 const CreateLocation = () => {
-  const auth = getAuth()
-  const navigate = useNavigate()
-  const isMounted = useRef(true)
+  
 
   const [geolocationEnabled, setGeolocationEnabled] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -47,6 +45,10 @@ const CreateLocation = () => {
     longitude,
   } = formData
 
+  const auth = getAuth()
+  const navigate = useNavigate()
+  const isMounted = useRef(true)
+
   useEffect(() => {
     if (isMounted) {
       onAuthStateChanged(auth, (user) => {
@@ -56,7 +58,7 @@ const CreateLocation = () => {
             userRef: user.uid,
           })
         } else {
-          navigate('/sign-in')
+          navigate('/login')
         }
       })
     }
@@ -68,12 +70,12 @@ const CreateLocation = () => {
   }, [isMounted])
 
   const onChange = (e) => {
-    let bool = null
+    let boolean = null
     if (e.target.value === 'true') {
-      bool = true
+      boolean = true
     }
     if (e.target.value === 'false') {
-      bool = false
+      boolean = false
     }
 
     // Files
@@ -84,11 +86,11 @@ const CreateLocation = () => {
         images: e.target.files,
       }))
     }
-    // Text/bool/numbers
+    // Text/boolean/numbers
     if (!e.target.files) {
       setFormData((prevState) => ({
         ...prevState,
-        [e.target.id]: bool ?? e.target.value,
+        [e.target.id]: boolean ?? e.target.value,
       }))
     }
   }
@@ -139,7 +141,7 @@ const CreateLocation = () => {
             type="text"
             id="name"
             value={name}
-            onClick={onChange}
+            onChange={onChange}
             placeholder="Name"
             required
           />
@@ -149,7 +151,7 @@ const CreateLocation = () => {
             type="number"
             id="bedrooms"
             value={bedrooms}
-            onClick={onChange}
+            onChange={onChange}
             min="1"
             max="50"
             required
@@ -160,7 +162,7 @@ const CreateLocation = () => {
             type="number"
             id="bathrooms"
             value={bathrooms}
-            onClick={onChange}
+            onChange={onChange}
             min="1"
             max="50"
             required
@@ -214,29 +216,29 @@ const CreateLocation = () => {
             id="address"
             type="text"
             value={address}
-            onClick={onChange}
+            onChange={onChange}
             required
           ></textarea>
         </div>
         {!geolocationEnabled && (
           <div>
-            <label className="formLabel">Latitude</label>
+            <label >Latitude</label>
             <input
-              className="formInputSmall"
+              
               type="number"
               id="latitude"
               value={latitude}
-              onClick={onChange}
+              onChange={onChange}
               required
             />
             <div>
-              <label className="formLabel">Longitude</label>
+              <label >Longitude</label>
               <input
-                className="formInputSmall"
+                
                 type="number"
                 id="longitude"
                 value={longitude}
-                onClick={onChange}
+                onChange={onChange}
                 required
               />
             </div>
@@ -248,7 +250,7 @@ const CreateLocation = () => {
             type="number"
             id="price"
             value={price}
-            onClick={onChange}
+            onChange={onChange}
             required
           />
         </div>
@@ -257,7 +259,7 @@ const CreateLocation = () => {
           <input
             type="file"
             id={images}
-            onClick={onChange}
+            onChange={onChange}
             max="6"
             accept=".jpg,.png,.jpeg"
             multiple
