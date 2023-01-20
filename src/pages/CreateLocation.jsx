@@ -67,9 +67,38 @@ const CreateLocation = () => {
     // eslint=disable-next-line react-hooks/exhaustive-deps
   }, [isMounted])
 
+  const onChange = (e) => {
+    let bool = null
+    if (e.target.value === 'true') {
+      bool = true
+    }
+    if (e.target.value === 'false') {
+      bool = false
+    }
+
+    // Files
+
+    if (e.target.files) {
+      setFormData((prevState) => ({
+        ...prevState,
+        images: e.target.files,
+      }))
+    }
+    // Text/bool/numbers
+    if (!e.target.files) {
+      setFormData((prevState) => ({
+        ...prevState,
+        [e.target.id]: bool ?? e.target.value,
+      }))
+    }
+  }
+  if(loading) {
+    return <Loading/>
+  }
+
   return (
     <div>
-      <form>
+      <form className="flex flex-col justify-center items-center">
         <div>
           <button
             type="button"
@@ -78,6 +107,7 @@ const CreateLocation = () => {
             }
             id="type"
             value="house"
+            onClick={onChange}
           >
             House
           </button>
@@ -88,6 +118,7 @@ const CreateLocation = () => {
             }
             id="type"
             value="condo"
+            onClick={onChange}
           >
             Condo
           </button>
@@ -98,6 +129,7 @@ const CreateLocation = () => {
             }
             id="type"
             value="room"
+            onClick={onChange}
           >
             Room
           </button>
@@ -107,6 +139,7 @@ const CreateLocation = () => {
             type="text"
             id="name"
             value={name}
+            onClick={onChange}
             placeholder="Name"
             required
           />
@@ -116,6 +149,7 @@ const CreateLocation = () => {
             type="number"
             id="bedrooms"
             value={bedrooms}
+            onClick={onChange}
             min="1"
             max="50"
             required
@@ -126,6 +160,7 @@ const CreateLocation = () => {
             type="number"
             id="bathrooms"
             value={bathrooms}
+            onClick={onChange}
             min="1"
             max="50"
             required
@@ -134,10 +169,11 @@ const CreateLocation = () => {
         <div>
           <label>Host Present</label>
           <button
-            class={hostPresent ? 'btn btn-primary' : 'btn btn-secondary'}
+            class={hostPresent ? 'btn btn-primary' : 'btn btn-outline'}
             type="button"
             id="hostPresent"
             value={true}
+            onClick={onChange}
           >
             Yes
           </button>
@@ -146,6 +182,7 @@ const CreateLocation = () => {
             type="button"
             id="hostPresent"
             value={false}
+            onClick={onChange}
           >
             No
           </button>
@@ -157,6 +194,7 @@ const CreateLocation = () => {
             type="button"
             id="food"
             value={true}
+            onClick={onChange}
           >
             Yes
           </button>
@@ -165,6 +203,7 @@ const CreateLocation = () => {
             type="button"
             id="food"
             value={false}
+            onClick={onChange}
           >
             No
           </button>
@@ -175,6 +214,7 @@ const CreateLocation = () => {
             id="address"
             type="text"
             value={address}
+            onClick={onChange}
             required
           ></textarea>
         </div>
@@ -186,6 +226,7 @@ const CreateLocation = () => {
               type="number"
               id="latitude"
               value={latitude}
+              onClick={onChange}
               required
             />
             <div>
@@ -195,20 +236,37 @@ const CreateLocation = () => {
                 type="number"
                 id="longitude"
                 value={longitude}
+                onClick={onChange}
                 required
               />
             </div>
           </div>
         )}
         <div>
-            <label>Price</label>
-            <input type="number" id='price' value={price} required />
+          <label>Price</label>
+          <input
+            type="number"
+            id="price"
+            value={price}
+            onClick={onChange}
+            required
+          />
         </div>
         <div>
-            <label>Images</label>
-            <input type="file" id='images' max='6' accept='.jpg,.png,.jpeg' multiple required />
+          <label>Images</label>
+          <input
+            type="file"
+            id={images}
+            onClick={onChange}
+            max="6"
+            accept=".jpg,.png,.jpeg"
+            multiple
+            required
+          />
         </div>
-        <button type='submit'>Submit Location</button>
+        <button className="btn" type="submit">
+          Submit Location
+        </button>
       </form>
     </div>
   )
