@@ -63,7 +63,6 @@ const Profile = () => {
         <div>
           <h2>Your Properties</h2>
           <div>
-            <p>Last Trip</p>
             <p>Beautiful Beach Condo</p>
             <p>img</p>
           </div>

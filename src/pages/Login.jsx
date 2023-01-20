@@ -61,7 +61,7 @@ const Login =() => {
       
       <div className="flex justify-center items-center space-x-3 mt-3">
         <h2 className="text-2xl">Not a member?</h2>
-        <Link href="/SignUp">
+        <Link to="/signup">
           <button className="btn btn-accent">Click Here</button>
         </Link>
       </div>
