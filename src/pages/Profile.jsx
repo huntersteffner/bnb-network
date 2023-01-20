@@ -13,9 +13,8 @@ import {
 } from 'firebase/firestore'
 import { db } from '../firebase.config'
 
-
 const Profile = () => {
-    const navigate = useNavigate()
+  const navigate = useNavigate()
 
   const auth = getAuth()
   const [loading, setLoading] = useState(true)
@@ -25,20 +24,52 @@ const Profile = () => {
     name: auth.currentUser.displayName,
     email: auth.currentUser.email,
   })
-  
-  const { name, email } = formData
 
+  const { name, email } = formData
 
   const onLogout = () => {
     auth.signOut()
     navigate('/')
   }
+
+  useEffect(() => {
+    const fetchListings = async () => {
+      const listingsData = collection(db, 'listings')
+
+      const q = query(
+        listingsData,
+        where('userRef', '==', auth.currentUser.uid),
+        orderBy('timestamp', 'desc')
+      )
+
+      const queryData = await getDocs(q)
+
+      const listings = []
+
+      queryData.forEach((doc) => {
+        return listings.push({
+          id: doc.id,
+          data: doc.data(),
+        })
+      })
+
+      setListings(listings)
+      setLoading(false)
+
+      console.log(listings)
+    }
+
+    fetchListings()
+  }, [auth.currentUser.uid])
+
   return (
     <div className="container mx-auto">
       <div className="flex flex-col justify-center items-center">
         <div className="flex">
           <h1 className="text-3xl font-bold">{`${name}'s profile`}</h1>
-          <button onClick={onLogout} className="btn btn-secondary btn-outline">Logout</button>
+          <button onClick={onLogout} className="btn btn-secondary btn-outline">
+            Logout
+          </button>
         </div>
         <div>
           <div>
@@ -63,7 +94,13 @@ const Profile = () => {
         <div>
           <h2>Your Properties</h2>
           <div>
-            <p>Beautiful Beach Condo</p>
+            {!loading && listings?.length > 0 ? (
+              <>
+                <p>{listings[0].data.name}</p>
+                <img src={listings[0].data.imgUrls[0]} alt="" />
+              </>
+            ) : (<p>You have not posted any properties</p>)}
+            <p>Title</p>
             <p>img</p>
           </div>
         </div>
