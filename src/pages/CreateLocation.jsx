@@ -13,9 +13,7 @@ import { v4 as uuidv4 } from 'uuid'
 import Loading from '../components/Loading'
 
 const CreateLocation = () => {
-  
-
-  const [geolocationEnabled, setGeolocationEnabled] = useState(false)
+  const [geolocationEnabled, setGeolocationEnabled] = useState(true)
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     type: 'house',
@@ -94,13 +92,119 @@ const CreateLocation = () => {
       }))
     }
   }
-  if(loading) {
-    return <Loading/>
+
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+
+    let geolocation = {}
+    let location
+
+    if (images.length > 6) {
+      setLoading(false)
+      alert('Max 6 images')
+      return
+    }
+
+    if (geolocationEnabled) {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.REACT_APP_GEOCODE_API_KEY}`
+      )
+
+      const data = await response.json()
+
+      console.log(data)
+
+      geolocation.lat = data.results[0]?.geometry.location.lat ?? 0
+      geolocation.lng = data.results[0]?.geometry.location.lng ?? 0
+
+      location =
+        data.status === 'ZERO_RESULTS'
+          ? undefined
+          : data.results[0]?.formatted_address
+
+      if (location === undefined || location.includes('undefined')) {
+        setLoading(false)
+        alert('Please enter valid address')
+        console.log(location)
+        return
+      }
+    } else {
+      geolocation.lat = latitude
+      geolocation.lng = longitude
+    }
+
+    const storeImg = async (image) => {
+      return new Promise((res, rej) => {
+        const storage = getStorage()
+        const fileName = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`
+
+        const storageRef = ref(storage, 'images/' + fileName)
+
+        const uploadImages = uploadBytesResumable(storageRef, image)
+
+        uploadImages.on(
+          'state_changed',
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            console.log('Upload is ' + progress + '% done')
+            switch (snapshot.state) {
+              case 'paused':
+                console.log('Upload is paused')
+                break
+              case 'running':
+                console.log('Upload is running')
+                break
+              default:
+                break
+            }
+          },
+          (error) => {
+            rej(error)
+          },
+          () => {
+            // Handle successful uploads on complete
+            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+            getDownloadURL(uploadImages.snapshot.ref).then((downloadURL) => {
+              res(downloadURL)
+            })
+          }
+        )
+      })
+    }
+
+    const imgUrls = await Promise.all(
+      [...images].map((image) => storeImg(image))
+    ).catch(() => {
+      setLoading(false)
+      alert('Images not uploaded')
+      return
+    })
+    const formDataDuplicate = {
+      ...formData,
+      imgUrls,
+      geolocation,
+      timestamp: serverTimestamp(),
+    }
+
+    formDataDuplicate.location = address
+    delete formDataDuplicate.images
+    delete formDataDuplicate.address
+
+    const docRef = await addDoc(collection(db, 'listings'), formDataDuplicate)
+
+    setLoading(false)
+    alert('Location Created')
+    navigate('/')
+  }
+  if (loading) {
+    return <Loading />
   }
 
   return (
     <div>
-      <form className="flex flex-col justify-center items-center">
+      <form onSubmit={onSubmit} className="flex flex-col justify-center items-center">
         <div>
           <button
             type="button"
@@ -222,9 +326,8 @@ const CreateLocation = () => {
         </div>
         {!geolocationEnabled && (
           <div>
-            <label >Latitude</label>
+            <label>Latitude</label>
             <input
-              
               type="number"
               id="latitude"
               value={latitude}
@@ -232,9 +335,8 @@ const CreateLocation = () => {
               required
             />
             <div>
-              <label >Longitude</label>
+              <label>Longitude</label>
               <input
-                
                 type="number"
                 id="longitude"
                 value={longitude}
