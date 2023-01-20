@@ -10,6 +10,7 @@ import Login from './pages/Login'
 import Profile from './pages/Profile'
 import SignUp from './pages/SignUp'
 import RestrictedRoute from './components/RestrictedRoute'
+import CreateLocation from './pages/CreateLocation'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           </Route>
           <Route path="/location" element={<Location />} />
           <Route path="/explore" element={<Explore />} />
+          <Route path="/create-location" element={<CreateLocation />} />
         </Routes>
         <Footer />
         <Loading />
