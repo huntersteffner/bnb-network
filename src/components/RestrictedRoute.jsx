@@ -1,14 +1,13 @@
 import { Navigate, Outlet } from "react-router-dom"
-// import { useAuthStatus } from "../hooks/useAuthStatus"
+import { useAuthChecker } from "../hooks/useAuthChecker"
 import Loading from "./Loading"
 
 const RestrictedRoute = () => {
-    // const {signedIn,verifyingStatus} = useAuthStatus()
-    // if(verifyingStatus) {
-    //     return <Loading/>
-    // }
-
-    // return signedIn ? <Outlet/> : <Navigate to='/login'/>
+    const {loggedIn,checkingStatus} = useAuthChecker()
+    if(checkingStatus) {
+        return <Loading/>
+    }
+    return loggedIn ? <Outlet /> : <Navigate to='/login'/>
 }
 
 export default RestrictedRoute
