@@ -50,29 +50,29 @@ const EditLocation = () => {
   const params = useParams()
 
   useEffect(() => {
-    if (listing && listing !== auth.currentUser.uid) {
+    if (listing && listing.userRef !== auth.currentUser.uid) {
       navigate('/')
     }
   })
 
-//   useEffect(() => {
-//     setLoading(true)
-//     const fetchLocation = async () => {
-//       const docRef = doc(db, 'listings', params.locationId)
-//       const docData = await getDoc(docRef)
-//       if(docData.exists()) {
-//         setListing(docData.data())
-//         setFormData({...docData.data(), address: docData.data().location})
-//         setLoading(false)
-//       } else {
-//         navigate('/')
+  useEffect(() => {
+    setLoading(true)
+    const fetchLocation = async () => {
+      const docRef = doc(db, 'listings', params.locationId)
+      const docData = await getDoc(docRef)
+      if(docData.exists()) {
+        setListing(docData.data())
+        setFormData({...docData.data(), address: docData.data().location})
+        setLoading(false)
+      } else {
+        navigate('/')
 
-//       }
+      }
 
 
-//     }
-//     fetchLocation()
-//   }, [params.locationId, navigate])
+    }
+    fetchLocation()
+  }, [params.locationId, navigate])
 
   useEffect(() => {
     if (isMounted) {
