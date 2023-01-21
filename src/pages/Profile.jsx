@@ -93,11 +93,15 @@ const Profile = () => {
         </div>
         <div>
           <h2>Your Properties</h2>
+          <Link to='/create-location'>
+            <button className='btn'>Add New Property</button>
+          </Link>
           <div>
             {!loading && listings?.length > 0 ? (
               <>
                 <p>{listings[0].data.name}</p>
                 <img src={listings[0].data.imgUrls[0]} alt="" />
+                <Link to={`/edit-location/${listings[0].id}`}>Edit</Link>
               </>
             ) : (<p>You have not posted any properties</p>)}
             <p>Title</p>

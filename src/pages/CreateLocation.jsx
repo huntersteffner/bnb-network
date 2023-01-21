@@ -8,7 +8,7 @@ import {
 } from 'firebase/storage'
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { db } from '../firebase.config'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import Loading from '../components/Loading'
 
@@ -46,6 +46,7 @@ const CreateLocation = () => {
   const auth = getAuth()
   const navigate = useNavigate()
   const isMounted = useRef(true)
+  const params = useParams()
 
   useEffect(() => {
     if (isMounted) {

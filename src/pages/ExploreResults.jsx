@@ -28,7 +28,6 @@ const ExploreResults = () => {
           listingsData,
           where('type', '==', params.locationType),
           orderBy('timestamp', 'desc'),
-          limit(10)
         )
         
 
@@ -52,7 +51,28 @@ const ExploreResults = () => {
     fetchListings()
   }, [params.locationType])
 
-  return <h1>Results</h1>
+  return (
+    <>
+        <h1>Results for {params.locationType}</h1>
+        {
+            loading ? (
+                <Loading/>
+            ) : listings && listings.length > 0 ? (
+                <div>
+                    <ul>
+                        {listings.map((listing) => (
+                            <li>
+                                {listing.data.name}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ) : (
+                <h1>No listings yet</h1>
+            )
+        }
+    </>
+  )
 }
 
 export default ExploreResults

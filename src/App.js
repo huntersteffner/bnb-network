@@ -5,7 +5,7 @@ import Navbar from './components/Navbar'
 import Loading from './components/Loading'
 import Explore from './pages/Explore'
 import History from './pages/History'
-import Location from './pages/Location'
+import EditLocation from './pages/EditLocation'
 import Login from './pages/Login'
 import Profile from './pages/Profile'
 import SignUp from './pages/SignUp'
@@ -27,7 +27,7 @@ function App() {
           <Route path="/profile" element={<RestrictedRoute />}>
             <Route path="/profile" element={<Profile />} />
           </Route>
-          <Route path="/location" element={<Location />} />
+          <Route path="/edit-location/:locationId" element={<EditLocation />} />
           <Route path="/create-location" element={<CreateLocation />} />
         </Routes>
         <Footer />
