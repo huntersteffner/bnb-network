@@ -205,7 +205,10 @@ const CreateLocation = () => {
 
   return (
     <div>
-      <form onSubmit={onSubmit} className="flex flex-col justify-center items-center">
+      <form
+        onSubmit={onSubmit}
+        className="flex flex-col justify-center items-center"
+      >
         <div>
           <button
             type="button"
