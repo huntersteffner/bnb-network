@@ -21,11 +21,11 @@ const History = () => {
 
   useEffect(() => {
     const fetchListings = async () => {
-      const listingsData = collection(db, 'users')
+      const listingsData = collection(db, 'bookedTrips')
 
       const q = query(
         listingsData,
-        where('name', '==', auth.currentUser.uid),
+        where('customerId', '==', auth.currentUser.uid),
         orderBy('timestamp', 'desc')
       )
 
@@ -47,16 +47,15 @@ const History = () => {
     }
 
     fetchListings()
-  },[auth.currentUser.uid])
+  }, [auth.currentUser.uid])
 
   return (
     <div>
       <h1>Your Trip History</h1>
       <div>
-        <p>img</p>
-        <p>title</p>
-        <p>price</p>
-        <p>dates</p>
+        {listings.map((listing) => (
+          <p>{listing.data.locationName}</p>
+        ))}
       </div>
       <div>
         <p>img</p>
