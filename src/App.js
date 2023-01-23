@@ -24,7 +24,10 @@ function App() {
           <Route path='/explore-results/:locationType' element={<ExploreResults/>} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/history" element={<History />} />
+          {/* <Route path="/history" element={<History />} /> */}
+          <Route path="/history" element={<RestrictedRoute />}>
+            <Route path="/history" element={<History />} />
+          </Route>
           <Route path="/profile" element={<RestrictedRoute />}>
             <Route path="/profile" element={<Profile />} />
           </Route>

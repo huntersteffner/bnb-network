@@ -46,6 +46,8 @@ const Profile = () => {
 
       const listings = []
 
+      console.log(query)
+
       queryData.forEach((doc) => {
         return listings.push({
           id: doc.id,
