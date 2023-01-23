@@ -46,7 +46,7 @@ const Carousel = () => {
         <div className="carousel carousel-end rounded-box">
           {listings.map(({ data, id }) => (
             <div className="carousel-item h-[50vh]">
-              <img src={data.imgUrls[0]} alt="Drink" />
+              <img onClick={() => navigate(`/view-location/${id}`)} src={data.imgUrls[0]} alt="Drink" />
             </div>
           ))}
           {/* <div className="carousel-item">

@@ -12,6 +12,7 @@ import SignUp from './pages/SignUp'
 import RestrictedRoute from './components/RestrictedRoute'
 import CreateLocation from './pages/CreateLocation'
 import ExploreResults from './pages/ExploreResults'
+import ViewLocation from './pages/ViewLocation'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
           </Route>
           <Route path="/edit-location/:locationId" element={<EditLocation />} />
+          <Route path="/view-location/:locationId" element={<ViewLocation />} />
           <Route path="/create-location" element={<CreateLocation />} />
         </Routes>
         <Footer />
