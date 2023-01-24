@@ -11,6 +11,7 @@ import {
   where,
   orderBy,
 } from 'firebase/firestore'
+import Loading from '../components/Loading'
 
 const History = () => {
   const navigate = useNavigate()
@@ -53,33 +54,20 @@ const History = () => {
     <div>
       <h1>Your Trip History</h1>
       <div>
-        {listings.map((listing) => (
-          <p>{listing.data.locationName}</p>
-        ))}
-      </div>
-      <div>
-        <p>img</p>
-        <p>title</p>
-        <p>price</p>
-        <p>dates</p>
-      </div>
-      <div>
-        <p>img</p>
-        <p>title</p>
-        <p>price</p>
-        <p>dates</p>
-      </div>
-      <div>
-        <p>img</p>
-        <p>title</p>
-        <p>price</p>
-        <p>dates</p>
-      </div>
-      <div>
-        <p>img</p>
-        <p>title</p>
-        <p>price</p>
-        <p>dates</p>
+        {loading ? (
+          <Loading />
+        ) : listings && listings.length > 0 ? (
+          <>
+            {listings.map((listing) => (
+              <>
+                <p>{listing.data.locationName}</p>
+                <img src={listing.data.image} alt={`First image for ${listing.data.locationName}`} />
+              </>
+            ))}
+          </>
+        ) : (
+          <p>No history</p>
+        )}
       </div>
     </div>
   )
