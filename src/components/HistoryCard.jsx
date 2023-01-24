@@ -1,6 +1,6 @@
 const HistoryCard = ({ listing, id }) => {
   return (
-    <div className="card w-96 bg-base-100 shadow-xl">
+    <div className="card w-96 bg-base-100 shadow-xl lg:w-1/2">
       <figure>
         <img src={listing.image} alt="Shoes" />
       </figure>

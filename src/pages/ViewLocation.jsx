@@ -1,7 +1,7 @@
-import { useEffect, useState, Component } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { getDoc, doc } from 'firebase/firestore'
-import { getAuth } from 'firebase/auth'
+import { getDoc, doc, addDoc,collection, serverTimestamp } from 'firebase/firestore'
+import { getAuth,onAuthStateChanged } from 'firebase/auth'
 import { db } from '../firebase.config'
 import Loading from '../components/Loading'
 // import { DateRangePicker } from 'react-date-range'
@@ -10,6 +10,7 @@ import format from 'date-fns/format'
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { addDays } from 'date-fns/esm'
+import {v4 as uuidv4} from 'uuid'
 
 // import { DateRangePicker } from 'rsuite'
 // import 'rsuite/dist/styles/rsuite-default.css'
@@ -17,7 +18,13 @@ import { addDays } from 'date-fns/esm'
 const ViewLocation = () => {
   const [listing, setListing] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [lastFetchedListing, setLastFetchedListing] = useState(null)
+  // const [lastFetchedListing, setLastFetchedListing] = useState(null)
+
+  const [dateRangeForSubmit, setDateRangeForSubmit] = useState({
+    dateRange: '',
+  })
+
+  const {dateRange} = dateRangeForSubmit
 
   const [range, setRange] = useState([
     {
@@ -60,6 +67,31 @@ const ViewLocation = () => {
     return <Loading />
   }
 
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+
+    if(dateRange === '') {
+      setLoading(false)
+      alert('Please enter date range')
+    }
+
+    setDateRangeForSubmit({
+      locationDates: dateRange,
+      locationAddress: listing.location,
+      customerId: listing.userRef,
+      image: listing.imgUrls[0],
+      locationId: params.locationId,
+      locationName: listing.name,
+      timestamp: serverTimestamp(),
+      type: listing.type,
+    }
+    )
+    const docRef = await addDoc(collection(db, 'bookedTrips'), dateRangeForSubmit)
+    setLoading(false)
+    // navigate('/history')
+  }
+
   return (
     <div>
         <h1>{listing.name}</h1>
@@ -67,7 +99,7 @@ const ViewLocation = () => {
         <p>Book rooms</p>
         {/* <DateRangePicker showOneCalendar /> */}
         {/* <DateRangePicker/> */}
-        <form>
+        <form onSubmit={onSubmit}>
             {/* <input readOnly value={calendar} /> */}
             {/* <Calendar date={new Date()} onChange={calendarHandler}/> */}
             <input id='dateRange' readOnly value={`${format(range[0].startDate, "MM/dd/yyyy")} to ${format(range[0].endDate, 'MM/dd/yyyy')}`} />
@@ -81,7 +113,7 @@ const ViewLocation = () => {
 
             />
             {/* <DateRangePicker/> */}
-            <button className='btn'>Book</button>
+            <button type="submit" className='btn'>Book</button>
         </form>
     </div>
   )

@@ -54,7 +54,7 @@ const History = () => {
   return (
     <div>
       <h1>Your Trip History</h1>
-      <div>
+      <div className='flex flex-col justify-center items-center space-y-6 my-3'>
         {loading ? (
           <Loading />
         ) : listings && listings.length > 0 ? (
