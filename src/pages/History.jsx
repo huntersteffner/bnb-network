@@ -12,6 +12,7 @@ import {
   orderBy,
 } from 'firebase/firestore'
 import Loading from '../components/Loading'
+import HistoryCard from '../components/HistoryCard'
 
 const History = () => {
   const navigate = useNavigate()
@@ -60,8 +61,7 @@ const History = () => {
           <>
             {listings.map((listing) => (
               <>
-                <p>{listing.data.locationName}</p>
-                <img src={listing.data.image} alt={`First image for ${listing.data.locationName}`} />
+                <HistoryCard listing={listing.data} id={listing.id} key={listing.id} />
               </>
             ))}
           </>
