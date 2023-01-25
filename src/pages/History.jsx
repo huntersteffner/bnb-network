@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import { getAuth } from 'firebase/auth'
+import { useState, useEffect,  } from 'react'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { db } from '../firebase.config'
 import {
   updateDoc,
