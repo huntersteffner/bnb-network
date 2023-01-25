@@ -26,17 +26,17 @@ const ViewLocation = () => {
   const [loading, setLoading] = useState(true)
   // const [lastFetchedListing, setLastFetchedListing] = useState(null)
 
-  const [dateRangeForSubmit, setDateRangeForSubmit] = useState({
-    customerId: '',
-  })
+  const [dateRangeForSubmit, setDateRangeForSubmit] = useState({})
 
   let currentUser = ''
   const { dateRange } = dateRangeForSubmit
 
   const [range, setRange] = useState([
     {
+      // startDate: new Date(),
+      // endDate: addDays(new Date(), 7),
       startDate: new Date(),
-      endDate: addDays(new Date(), 7),
+      endDate: new Date(),
       key: 'selection',
     },
   ])
@@ -50,8 +50,6 @@ const ViewLocation = () => {
   const params = useParams()
   const auth = getAuth()
   const isMounted = useRef(true)
-
-
 
   // useEffect(() => {
   //   if (isMounted) {
@@ -67,13 +65,40 @@ const ViewLocation = () => {
   //   console.log(dateRangeForSubmit)
   // }, [isMounted])
 
+  let dateString = ''
+
+  useEffect(() => {
+    dateString = `${format(range[0].startDate, 'MM/dd/yyyy')} to ${format(
+      range[0].endDate,
+      'MM/dd/yyyy'
+    )}`
+
+    const prepareToPost = async () => {
+      await setDateRangeForSubmit({
+        // locationDates: `${format(range[0].startDate, 'MM/dd/yyyy')} to ${format(
+        //   range[0].endDate,
+        //   'MM/dd/yyyy'
+        // )}`,
+        locationDates: dateString,
+        locationAddress: listing.location,
+        customerId: auth.currentUser.uid,
+        image: listing.imgUrls[0],
+        locationId: params.locationId,
+        locationName: listing.name,
+        timestamp: serverTimestamp(),
+        type: listing.type,
+        ownerId: listing.userRef,
+      })
+    }
+
+    prepareToPost()
+  }, [range])
+
   onAuthStateChanged(auth, (user) => {
-    if(user) {
+    if (user) {
       currentUser = user.uid
     }
   })
-
- 
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -102,26 +127,39 @@ const ViewLocation = () => {
     //   alert('Please enter date range')
     // }
 
-    await setDateRangeForSubmit({
-      locationDates: `${format(range[0].startDate, 'MM/dd/yyyy')} to ${format(
-        range[0].endDate,
-        'MM/dd/yyyy'
-      )}`,
-      locationAddress: listing.location,
-      customerId: auth.currentUser.uid,
-      image: listing.imgUrls[0],
-      locationId: params.locationId,
-      locationName: listing.name,
-      timestamp: serverTimestamp(),
-      type: listing.type,
-      ownerId: listing.userRef,
-    })
+    // await setDateRangeForSubmit({
+    //   // locationDates: `${format(range[0].startDate, 'MM/dd/yyyy')} to ${format(
+    //   //   range[0].endDate,
+    //   //   'MM/dd/yyyy'
+    //   // )}`,
+    //   locationDates: dateString,
+    //   locationAddress: listing.location,
+    //   customerId: auth.currentUser.uid,
+    //   image: listing.imgUrls[0],
+    //   locationId: params.locationId,
+    //   locationName: listing.name,
+    //   timestamp: serverTimestamp(),
+    //   type: listing.type,
+    //   ownerId: listing.userRef,
+    // })
+
     const docRef = await addDoc(
       collection(db, 'bookedTrips'),
       dateRangeForSubmit
     )
+
     setLoading(false)
     // navigate('/history')
+  }
+
+  const onChange = (e) => {
+    const input = document.getGetElementById('dateRange').value()
+    console.log(input)
+    setDateRangeForSubmit({
+      locationDates: e.target.value,
+    })
+
+    console.log(dateRangeForSubmit)
   }
 
   return (
@@ -137,13 +175,16 @@ const ViewLocation = () => {
         <input
           id="dateRange"
           readOnly
+          onChange={onChange}
           value={`${format(range[0].startDate, 'MM/dd/yyyy')} to ${format(
             range[0].endDate,
             'MM/dd/yyyy'
           )}`}
         />
         <DateRange
-          onChange={(item) => setRange([item.selection])}
+          onChange={(item) => {
+             setRange([item.selection])
+          }}
           editableDateInputs={true}
           moveRangeOnFirstSelection={false}
           ranges={range}
