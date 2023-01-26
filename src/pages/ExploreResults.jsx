@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
   collection,
   getDocs,
@@ -27,9 +28,8 @@ const ExploreResults = () => {
         const q = query(
           listingsData,
           where('type', '==', params.locationType),
-          orderBy('timestamp', 'desc'),
+          orderBy('timestamp', 'desc')
         )
-        
 
         const queryData = await getDocs(q)
         let listings = []
@@ -37,7 +37,7 @@ const ExploreResults = () => {
         queryData.forEach((doc) => {
           return listings.push({
             id: doc.id,
-            data: doc.data()
+            data: doc.data(),
           })
         })
 
@@ -52,26 +52,38 @@ const ExploreResults = () => {
   }, [params.locationType])
 
   return (
-    <>
-        <h1>Results for {params.locationType}</h1>
-        {
-            loading ? (
-                <Loading/>
-            ) : listings && listings.length > 0 ? (
-                <div>
-                    <ul>
-                        {listings.map((listing) => (
-                            <li>
-                                {listing.data.name}
-                            </li>
-                        ))}
-                    </ul>
+    <div className="min-h-[80vh] container mx-auto flex flex-col items-center">
+      <h1 className="title">
+        Results for{' '}
+        {params.locationType.charAt(0).toUpperCase() +
+          params.locationType.slice(1)}
+      </h1>
+      <div>
+        {loading ? (
+          <Loading />
+        ) : listings && listings.length > 0 ? (
+          <>
+            {listings.map((listing) => (
+              <div className="explore-card">
+                <p className="card-title">{listing.data.name}</p>
+                <div className="card-body">
+                  <img src={listing.data.imgUrls[0]} alt="Listing" />
+                  <p>{listing.data.location}</p>
+
+                  <Link to={`/view-location/${listing.id}`}>
+                    <button className="btn btn-warning">
+                      More Information
+                    </button>
+                  </Link>
                 </div>
-            ) : (
-                <h1>No listings yet</h1>
-            )
-        }
-    </>
+              </div>
+            ))}
+          </>
+        ) : (
+          <h2 className="text-3xl">No locations have been created yet.</h2>
+        )}
+      </div>
+    </div>
   )
 }
 

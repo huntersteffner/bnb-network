@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 
-const Login =() => {
-    const navigate = useNavigate()
+const Login = () => {
+  const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
     email: '',
@@ -38,17 +38,31 @@ const Login =() => {
       console.log(error)
     }
   }
-    return (
-        <>
-      <form onSubmit={onSubmit} className="form-control container mx-auto flex flex-col">
-        <h1>Login</h1>
+  return (
+    <div className='min-h-[80vh] flex flex-col justify-center items-center'>
+      <form
+        onSubmit={onSubmit}
+        className="form-control container mx-auto flex flex-col items-center justify-center"
+      >
         <div className="flex flex-col justify-center items-center">
           <p className="text-2xl">Email Address</p>
-          <input type="email" id='email' value={email} onChange={onChange} className="input input-bordered input-ghost" />
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={onChange}
+            className="input input-bordered input-ghost"
+          />
         </div>
         <div className="flex flex-col justify-center items-center">
           <p className="text-2xl">Password</p>
-          <input type="password" id='password' value={password} onChange={onChange} className="input input-bordered input-ghost" />
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={onChange}
+            className="input input-bordered input-ghost"
+          />
         </div>
 
         <button
@@ -58,15 +72,15 @@ const Login =() => {
           Login
         </button>
       </form>
-      
+
       <div className="flex justify-center items-center space-x-3 mt-3">
         <h2 className="text-2xl">Not a member?</h2>
         <Link to="/signup">
           <button className="btn btn-accent">Click Here</button>
         </Link>
       </div>
-    </>
-    )
+    </div>
+  )
 }
 
 export default Login

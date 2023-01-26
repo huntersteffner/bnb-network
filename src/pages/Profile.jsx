@@ -107,11 +107,11 @@ const Profile = () => {
                     <div className='bg-base-100'>
                       <p>{listing.data.name}</p>
                       <p>{listing.data.location}</p>
+                      <Link to={`/edit-location/${listing.id}`}><button className='btn btn-warning w-full'>Edit</button></Link>
                     </div>
                   ))}
-                  {/* <p>{listings[0].data.name}</p>
-                  <img src={listings[0].data.imgUrls[0]} alt="" /> */}
-                  <Link to={`/edit-location/${listings[0].id}`}><button className='btn btn-warning w-full'>Edit</button></Link>
+                  
+                  
                 </>
               ) : (
                 <p className="font-bold text-xl text-center">

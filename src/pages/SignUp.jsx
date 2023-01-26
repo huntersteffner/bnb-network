@@ -29,20 +29,20 @@ const SignUp = () => {
     e.preventDefault()
 
     try {
-        const auth = getAuth()
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        )
-        const user = userCredential.user
-        updateProfile(auth.currentUser, {
-          displayName: name,
-        })
-        const formDataCopy = { ...formData }
-        delete formDataCopy.password
-        formDataCopy.timestamp = serverTimestamp()
-        await setDoc(doc(db, 'users', user.uid), formDataCopy)
+      const auth = getAuth()
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      )
+      const user = userCredential.user
+      updateProfile(auth.currentUser, {
+        displayName: name,
+      })
+      const formDataCopy = { ...formData }
+      delete formDataCopy.password
+      formDataCopy.timestamp = serverTimestamp()
+      await setDoc(doc(db, 'users', user.uid), formDataCopy)
       navigate('/')
     } catch (error) {
       console.log(error)
@@ -51,12 +51,11 @@ const SignUp = () => {
   }
 
   return (
-    <>
+    <div className="min-h-[80vh] flex flex-col justify-center items-center">
       <form
         onSubmit={onSubmit}
-        className="form-control container mx-auto flex flex-col"
+        className="form-control container mx-auto flex flex-col m-h-[80vh]"
       >
-        <h1>Login</h1>
         <div className="flex flex-col justify-center items-center">
           <p className="text-2xl">Name</p>
           <input
@@ -100,7 +99,7 @@ const SignUp = () => {
           <button className="btn btn-accent">Click Here</button>
         </Link>
       </div>
-    </>
+    </div>
   )
 }
 
