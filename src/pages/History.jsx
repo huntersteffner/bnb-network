@@ -53,7 +53,7 @@ const History = () => {
 
   return (
     <div className='container mx-auto'>
-      <h1 className='text-center font-bold text-5xl md:text-3xl'>Your Trip History</h1>
+      <h1 className='title'>Your Trip History</h1>
       <div className='flex flex-col justify-center items-center space-y-6 my-3'>
         {loading ? (
           <Loading />
