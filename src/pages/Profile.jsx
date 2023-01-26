@@ -77,45 +77,47 @@ const Profile = () => {
           </button>
         </div>
       </div>
-      <div className="container mx-auto">
+      <div className="container mx-auto min-h-[80vh]">
         <div className="flex flex-col w-full justify-center items-center">
-          <div>
-            <div>
-              <p className='title'>Most Recent Trip</p>
-              <p>Beautiful Beach Condo</p>
-              <p>Sept 13, 2023 - Sept 19, 2023</p>
+          <div className="card justify-center items-center py-4 w-96 bg-base-100 shadow-xl px-4 my-3">
+            <div className="card-body">
+              <p className="title">Most Recent Trip</p>
+              <p className="text-2xl">Beautiful Beach Condo</p>
+              <p className="text-xl">Sept 13, 2023 - Sept 19, 2023</p>
               <p>img</p>
-            </div>
-            <div>
-              <p>Last Trip</p>
-              <p>Beautiful Beach Condo</p>
-              <p>Sept 13, 2023 - Sept 19, 2023</p>
-              <p>img</p>
-            </div>
-            <div className="flex justify-center items-center space-x-2">
-              <p className='text-xl font-bold'>See complete trip history</p>
-              <Link to="/history">
-                <button className="btn btn-primary">Click Here</button>
-              </Link>
+              <div className="flex justify-center items-center">
+                <p className="text-xl font-bold text-center w-[40%]">
+                  See complete trip history
+                </p>
+                <Link to="/history">
+                  <button className="btn btn-primary">Click Here</button>
+                </Link>
+              </div>
             </div>
           </div>
-          <div>
-            <h2 className='title'>Your Properties</h2>
+          <div className="card justify-center items-center py-4 w-96 bg-base-100 shadow-xl my-3">
+            <h2 className="title">Your Properties</h2>
             <Link to="/create-location">
-              <button className="btn">Add New Property</button>
+              <button className="btn btn-primary mt-5">Add New Property</button>
             </Link>
-            <div>
+            <div className="card-body">
               {!loading && listings?.length > 0 ? (
                 <>
-                  <p>{listings[0].data.name}</p>
-                  <img src={listings[0].data.imgUrls[0]} alt="" />
-                  <Link to={`/edit-location/${listings[0].id}`}>Edit</Link>
+                  {listings.map((listing) => (
+                    <div className='bg-base-100'>
+                      <p>{listing.data.name}</p>
+                      <p>{listing.data.location}</p>
+                    </div>
+                  ))}
+                  {/* <p>{listings[0].data.name}</p>
+                  <img src={listings[0].data.imgUrls[0]} alt="" /> */}
+                  <Link to={`/edit-location/${listings[0].id}`}><button className='btn btn-warning w-full'>Edit</button></Link>
                 </>
               ) : (
-                <p>You have not posted any properties</p>
+                <p className="font-bold text-xl text-center">
+                  You have not posted any properties!
+                </p>
               )}
-              <p>Title</p>
-              <p>img</p>
             </div>
           </div>
         </div>

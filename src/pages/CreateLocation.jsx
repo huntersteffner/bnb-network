@@ -214,9 +214,9 @@ const CreateLocation = () => {
           <div className="flex flex-col   w-full space-y-2 lg:flex-row lg:space-y-0 lg:flex-wrap lg:justify-center lg:items-center">
             <button
               type="button"
-              className={
-                `lg:w-1/4 m-1 ${type === 'house' ? 'btn btn-secondary' : 'btn btn-warning'}`
-              }
+              className={`lg:w-1/4 m-1 ${
+                type === 'house' ? 'btn btn-secondary' : 'btn btn-warning'
+              }`}
               id="type"
               value="house"
               onClick={onChange}
@@ -225,9 +225,9 @@ const CreateLocation = () => {
             </button>
             <button
               type="button"
-              className={
-                `lg:w-1/4 m-1 ${type === 'condo' ? 'btn btn-secondary' : 'btn btn-warning'}`
-              }
+              className={`lg:w-1/4 m-1 ${
+                type === 'condo' ? 'btn btn-secondary' : 'btn btn-warning'
+              }`}
               id="type"
               value="condo"
               onClick={onChange}
@@ -236,9 +236,9 @@ const CreateLocation = () => {
             </button>
             <button
               type="button"
-              className={
-                `lg:w-1/4 m-1 ${type === 'cabin' ? 'btn btn-secondary' : 'btn btn-warning'}`
-              }
+              className={`lg:w-1/4 m-1 ${
+                type === 'cabin' ? 'btn btn-secondary' : 'btn btn-warning'
+              }`}
               id="type"
               value="cabin"
               onClick={onChange}
@@ -247,9 +247,9 @@ const CreateLocation = () => {
             </button>
             <button
               type="button"
-              className={
-                `lg:w-1/4 m-1 ${type === 'apartment' ? 'btn btn-secondary' : 'btn btn-warning'}`
-              }
+              className={`lg:w-1/4 m-1 ${
+                type === 'apartment' ? 'btn btn-secondary' : 'btn btn-warning'
+              }`}
               id="type"
               value="apartment"
               onClick={onChange}
@@ -258,9 +258,9 @@ const CreateLocation = () => {
             </button>
             <button
               type="button"
-              className={
-                `lg:w-1/4 m-1 ${type === 'room' ? 'btn btn-secondary' : 'btn btn-warning'}`
-              }
+              className={`lg:w-1/4 m-1 ${
+                type === 'room' ? 'btn btn-secondary' : 'btn btn-warning'
+              }`}
               id="type"
               value="room"
               onClick={onChange}
@@ -407,7 +407,9 @@ const CreateLocation = () => {
           />
         </div>
         <div className="w-full grid grid-cols-1 md:grid-cols-2">
-          <label className="label mx-auto text-center text-3xl md:mx-0">Images:</label>
+          <label className="label mx-auto text-center text-3xl md:mx-0">
+            Images:
+          </label>
           <input
             className="file-input file-input-bordered file-input-warning w-full mx-auto max-w-xs"
             type="file"

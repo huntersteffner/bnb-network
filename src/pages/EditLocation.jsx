@@ -224,123 +224,165 @@ const EditLocation = () => {
 
   return (
     <>
-      <div>
+      <div className="container mx-auto">
         <form
           onSubmit={onSubmit}
-          className="flex flex-col justify-center items-center"
+          className="flex flex-col justify-center items-center m-3 space-y-2"
         >
-          <div>
-            <button
-              type="button"
-              className={
-                type === 'house' ? 'btn btn-primary' : 'btn btn-secondary'
-              }
-              id="type"
-              value="house"
-              onClick={onChange}
-            >
-              House
-            </button>
-            <button
-              type="button"
-              className={
-                type === 'condo' ? 'btn btn-primary' : 'btn btn-secondary'
-              }
-              id="type"
-              value="condo"
-              onClick={onChange}
-            >
-              Condo
-            </button>
-            <button
-              type="button"
-              className={
-                type === 'room' ? 'btn btn-primary' : 'btn btn-secondary'
-              }
-              id="type"
-              value="room"
-              onClick={onChange}
-            >
-              Room
-            </button>
+          <div className="flex flex-col flex-wrap justify-center items-center w-full">
+            <label className="label text-3xl">Type of Location</label>
+
+            <div className="flex flex-col   w-full space-y-2 lg:flex-row lg:space-y-0 lg:flex-wrap lg:justify-center lg:items-center">
+              <button
+                type="button"
+                className={`lg:w-1/4 m-1 ${
+                  type === 'house' ? 'btn btn-secondary' : 'btn btn-warning'
+                }`}
+                id="type"
+                value="house"
+                onClick={onChange}
+              >
+                House
+              </button>
+              <button
+                type="button"
+                className={`lg:w-1/4 m-1 ${
+                  type === 'condo' ? 'btn btn-secondary' : 'btn btn-warning'
+                }`}
+                id="type"
+                value="condo"
+                onClick={onChange}
+              >
+                Condo
+              </button>
+              <button
+                type="button"
+                className={`lg:w-1/4 m-1 ${
+                  type === 'cabin' ? 'btn btn-secondary' : 'btn btn-warning'
+                }`}
+                id="type"
+                value="cabin"
+                onClick={onChange}
+              >
+                Cabin
+              </button>
+              <button
+                type="button"
+                className={`lg:w-1/4 m-1 ${
+                  type === 'apartment' ? 'btn btn-secondary' : 'btn btn-warning'
+                }`}
+                id="type"
+                value="apartment"
+                onClick={onChange}
+              >
+                Apartment
+              </button>
+              <button
+                type="button"
+                className={`lg:w-1/4 m-1 ${
+                  type === 'room' ? 'btn btn-secondary' : 'btn btn-warning'
+                }`}
+                id="type"
+                value="room"
+                onClick={onChange}
+              >
+                Room
+              </button>
+            </div>
           </div>
-          <div>
+          <div className="input-div">
+            <label className="label text-3xl">Name:</label>
             <input
+              className="input-el"
               type="text"
               id="name"
               value={name}
               onChange={onChange}
-              placeholder="Name"
               required
             />
           </div>
-          <div>
+          <div className="input-div">
+            <label className="label text-3xl">Bedrooms:</label>
             <input
+              className="input-el w-full"
               type="number"
               id="bedrooms"
               value={bedrooms}
               onChange={onChange}
-              min="1"
-              max="50"
               required
             />
           </div>
-          <div>
+
+          <div className="input-div">
+            <label className="label text-3xl">Bathrooms:</label>
             <input
+              className="input-el"
               type="number"
               id="bathrooms"
               value={bathrooms}
               onChange={onChange}
-              min="1"
-              max="50"
               required
             />
           </div>
-          <div>
-            <label>Host Present</label>
-            <button
-              class={hostPresent ? 'btn btn-primary' : 'btn btn-outline'}
-              type="button"
-              id="hostPresent"
-              value={true}
-              onClick={onChange}
-            >
-              Yes
-            </button>
-            <button
-              class={!hostPresent ? 'btn btn-primary' : 'btn btn-secondary'}
-              type="button"
-              id="hostPresent"
-              value={false}
-              onClick={onChange}
-            >
-              No
-            </button>
+
+          <div className="input-div">
+            <label className="label text-3xl">Host Present: </label>
+            <div className="flex flex-col justify-center w-full space-y-1">
+              <button
+                class={
+                  hostPresent
+                    ? 'btn btn-secondary w-full'
+                    : 'btn btn-warning w-full'
+                }
+                type="button"
+                id="hostPresent"
+                value={true}
+                onClick={onChange}
+              >
+                Yes
+              </button>
+              <button
+                class={
+                  !hostPresent
+                    ? 'btn btn-secondary w-full'
+                    : 'btn btn-warning w-full'
+                }
+                type="button"
+                id="hostPresent"
+                value={false}
+                onClick={onChange}
+              >
+                No
+              </button>
+            </div>
           </div>
-          <div>
-            <label>Food Provided</label>
-            <button
-              class={food ? 'btn btn-primary' : 'btn btn-secondary'}
-              type="button"
-              id="food"
-              value={true}
-              onClick={onChange}
-            >
-              Yes
-            </button>
-            <button
-              class={!food ? 'btn btn-primary' : 'btn btn-secondary'}
-              type="button"
-              id="food"
-              value={false}
-              onClick={onChange}
-            >
-              No
-            </button>
+          <div className="input-div">
+            <label className="label text-3xl">Food Provided: </label>
+            <div className="flex flex-col justify-center w-full space-y-1">
+              <button
+                class={food ? 'btn btn-secondary' : 'btn btn-warning'}
+                type="button"
+                id="food"
+                value={true}
+                onClick={onChange}
+              >
+                Yes
+              </button>
+              <button
+                class={!food ? 'btn btn-secondary' : 'btn btn-warning'}
+                type="button"
+                id="food"
+                value={false}
+                onClick={onChange}
+              >
+                No
+              </button>
+            </div>
           </div>
-          <div>
-            <label>Address</label>
+          <div className="input-div">
+            <label className="label text-3xl">Address: </label>
             <textarea
+              className="textarea textarea-bordered textarea-secondary"
               id="address"
               type="text"
               value={address}
@@ -349,18 +391,20 @@ const EditLocation = () => {
             ></textarea>
           </div>
           {!geolocationEnabled && (
-            <div>
-              <label>Latitude</label>
+            <div className="input-div">
+              <label className="label text-3xl">Latitude</label>
               <input
+                className="input-el"
                 type="number"
                 id="latitude"
                 value={latitude}
                 onChange={onChange}
                 required
               />
-              <div>
-                <label>Longitude</label>
+              <div className="input-div">
+                <label className="label text-3xl">Longitude</label>
                 <input
+                  className="input-el"
                   type="number"
                   id="longitude"
                   value={longitude}
@@ -370,9 +414,10 @@ const EditLocation = () => {
               </div>
             </div>
           )}
-          <div>
-            <label>Price</label>
+          <div className="input-div">
+            <label className="label text-3xl">Price:</label>
             <input
+              className="input-el"
               type="number"
               id="price"
               value={price}
@@ -380,9 +425,12 @@ const EditLocation = () => {
               required
             />
           </div>
-          <div>
-            <label>Images</label>
+          <div className="w-full grid grid-cols-1 md:grid-cols-2">
+            <label className="label mx-auto text-center text-3xl md:mx-0">
+              Images:
+            </label>
             <input
+              className="file-input file-input-bordered file-input-warning w-full mx-auto max-w-xs"
               type="file"
               id={images}
               onChange={onChange}
@@ -392,9 +440,9 @@ const EditLocation = () => {
               required
             />
           </div>
-          <button className="btn" type="submit">
-            Submit Location
-          </button>
+          <button className="btn btn-primary w-full my-3" type="submit">
+          Submit Location
+        </button>
         </form>
       </div>
     </>

@@ -8,7 +8,7 @@ import roomLink from '../img/room-link.jpg'
 
 const Explore = () => {
   return (
-    <>
+    <div className='min-h-screen'>
       <Carousel />
       <h1 className="title">What type of BNB are you looking for?</h1>
       <div className="flex flex-col justify-center items-center md:flex-row md:flex-wrap">
@@ -39,7 +39,7 @@ const Explore = () => {
           <img className="explore-link" src={roomLink} alt="Room" />
         </Link>
       </div>
-    </>
+    </div>
   )
 }
 

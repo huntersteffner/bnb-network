@@ -52,7 +52,7 @@ const History = () => {
   }, [auth.currentUser.uid])
 
   return (
-    <div className='container mx-auto'>
+    <div className='container mx-auto min-h-screen'>
       <h1 className='title'>Your Trip History</h1>
       <div className='flex flex-col justify-center items-center space-y-6 my-3'>
         {loading ? (
