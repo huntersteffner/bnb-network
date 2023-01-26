@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.input-el {
+    @apply input input-bordered input-secondary;
+}
+.input-div {
+    @apply grid grid-cols-2;
+}

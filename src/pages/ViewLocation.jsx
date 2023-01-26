@@ -41,29 +41,29 @@ const ViewLocation = () => {
     },
   ])
 
-  //   const calendarHandler =(date) => {
-  //     console.log(format(date, 'MM/dd/yyyy'))
-  //     // setCalendar(format(date, 'MM/dd/yyyy'))
-  //   }
+  
 
   const navigate = useNavigate()
   const params = useParams()
   const auth = getAuth()
   const isMounted = useRef(true)
 
-  // useEffect(() => {
-  //   if (isMounted) {
-  //     onAuthStateChanged(auth, (user) => {
-  //       if (user) {
-  //         setDateRangeForSubmit({
-  //           customerId: user.uid
-  //         })
-  //       }
-  //     })
-  //   }
+  useEffect(() => {
+    if (isMounted) {
+      onAuthStateChanged(auth, (user) => {
+        if (!user) {
+          navigate('/login')
+        } 
+      })
+    }
 
-  //   console.log(dateRangeForSubmit)
-  // }, [isMounted])
+    return () => {
+      isMounted.current = false
+    }
+    // eslint=disable-next-line react-hooks/exhaustive-deps
+  }, [isMounted])
+
+  
 
   let dateString = ''
 

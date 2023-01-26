@@ -13,6 +13,12 @@ const Explore = () => {
         <Link to="/explore-results/condo">
           <p>Condo</p>
         </Link>
+        <Link to="/explore-results/cabin">
+          <p>Cabin</p>
+        </Link>
+        <Link to="/explore-results/apartment">
+          <p>Apartment</p>
+        </Link>
         <Link to="/explore-results/room">
           <p>Room</p>
         </Link>
