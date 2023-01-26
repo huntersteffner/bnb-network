@@ -36,7 +36,7 @@ function App() {
           <Route path="/create-location" element={<CreateLocation />} />
         </Routes>
         <Footer />
-        <Loading />
+        
       </Router>
     </>
   )

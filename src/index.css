@@ -6,5 +6,5 @@
     @apply input input-bordered input-secondary;
 }
 .input-div {
-    @apply grid grid-cols-2;
+    @apply grid grid-cols-2 w-full;
 }

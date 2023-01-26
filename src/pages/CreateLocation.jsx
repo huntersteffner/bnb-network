@@ -204,18 +204,18 @@ const CreateLocation = () => {
   }
 
   return (
-    <div>
+    <div className="container mx-auto">
       <form
         onSubmit={onSubmit}
-        className="flex flex-col justify-center items-center m-3"
+        className="flex flex-col justify-center items-center m-3 space-y-2"
       >
         <div className="flex flex-col flex-wrap justify-center items-center w-full">
           <label className="label text-3xl">Type of Location</label>
-          <div className="flex flex-col w-full space-y-2">
+          <div className="flex flex-col   w-full space-y-2 lg:flex-row lg:space-y-0 lg:flex-wrap lg:justify-center lg:items-center">
             <button
               type="button"
               className={
-                type === 'house' ? 'btn btn-secondary' : 'btn btn-warning'
+                `lg:w-1/4 m-1 ${type === 'house' ? 'btn btn-secondary' : 'btn btn-warning'}`
               }
               id="type"
               value="house"
@@ -226,7 +226,7 @@ const CreateLocation = () => {
             <button
               type="button"
               className={
-                type === 'condo' ? 'btn btn-secondary' : 'btn btn-warning'
+                `lg:w-1/4 m-1 ${type === 'condo' ? 'btn btn-secondary' : 'btn btn-warning'}`
               }
               id="type"
               value="condo"
@@ -237,7 +237,7 @@ const CreateLocation = () => {
             <button
               type="button"
               className={
-                type === 'cabin' ? 'btn btn-secondary' : 'btn btn-warning'
+                `lg:w-1/4 m-1 ${type === 'cabin' ? 'btn btn-secondary' : 'btn btn-warning'}`
               }
               id="type"
               value="cabin"
@@ -248,7 +248,7 @@ const CreateLocation = () => {
             <button
               type="button"
               className={
-                type === 'apartment' ? 'btn btn-secondary' : 'btn btn-warning'
+                `lg:w-1/4 m-1 ${type === 'apartment' ? 'btn btn-secondary' : 'btn btn-warning'}`
               }
               id="type"
               value="apartment"
@@ -259,7 +259,7 @@ const CreateLocation = () => {
             <button
               type="button"
               className={
-                type === 'room' ? 'btn btn-secondary' : 'btn btn-warning'
+                `lg:w-1/4 m-1 ${type === 'room' ? 'btn btn-secondary' : 'btn btn-warning'}`
               }
               id="type"
               value="room"
@@ -269,96 +269,101 @@ const CreateLocation = () => {
             </button>
           </div>
         </div>
-        <div>
-          <div className="input-div">
-            <label className="label text-3xl">Name:</label>
-            <input
-              className="input-el"
-              type="text"
-              id="name"
-              value={name}
-              onChange={onChange}
-              placeholder="Name"
-              required
-            />
-          </div>
-        </div>
-        <div>
-          <div className="input-div">
-            <label className="label text-3xl">Bedrooms:</label>
-            <input
-              className="input-el w-full"
-              type="number"
-              id="bedrooms"
-              value={bedrooms}
-              onChange={onChange}
-              required
-            />
-          </div>
-        </div>
-        <div>
-          <div className="input-div">
-            <label className="label text-3xl">Bathrooms:</label>
-            <input
-              className="input-el"
-              type="number"
-              id="bathrooms"
-              value={bathrooms}
-              onChange={onChange}
-              required
-            />
-          </div>
-        </div>
-        <div>
-          <div className="input-div">
-            <label className="label text-3xl">Host Present</label>
-            <div>
-              <button
-                class={hostPresent ? 'btn btn-secondary' : 'btn btn-warning'}
-                type="button"
-                id="hostPresent"
-                value={true}
-                onClick={onChange}
-              >
-                Yes
-              </button>
-              <button
-                class={!hostPresent ? 'btn btn-secondary' : 'btn btn-warning'}
-                type="button"
-                id="hostPresent"
-                value={false}
-                onClick={onChange}
-              >
-                No
-              </button>
-            </div>
-          </div>
-        </div>
-        <div>
-          <label>Food Provided</label>
-          <button
-            class={food ? 'btn btn-secondary' : 'btn btn-warning'}
-            type="button"
-            id="food"
-            value={true}
-            onClick={onChange}
-          >
-            Yes
-          </button>
-          <button
-            class={!food ? 'btn btn-secondary' : 'btn btn-warning'}
-            type="button"
-            id="food"
-            value={false}
-            onClick={onChange}
-          >
-            No
-          </button>
-        </div>
-        <div>
-          <label>Address</label>
-          <textarea
+
+        <div className="input-div">
+          <label className="label text-3xl">Name:</label>
+          <input
             className="input-el"
+            type="text"
+            id="name"
+            value={name}
+            onChange={onChange}
+            required
+          />
+        </div>
+
+        <div className="input-div">
+          <label className="label text-3xl">Bedrooms:</label>
+          <input
+            className="input-el w-full"
+            type="number"
+            id="bedrooms"
+            value={bedrooms}
+            onChange={onChange}
+            required
+          />
+        </div>
+
+        <div className="input-div">
+          <label className="label text-3xl">Bathrooms:</label>
+          <input
+            className="input-el"
+            type="number"
+            id="bathrooms"
+            value={bathrooms}
+            onChange={onChange}
+            required
+          />
+        </div>
+
+        <div className="input-div">
+          <label className="label text-3xl">Host Present: </label>
+          <div className="flex flex-col justify-center w-full space-y-1">
+            <button
+              class={
+                hostPresent
+                  ? 'btn btn-secondary w-full'
+                  : 'btn btn-warning w-full'
+              }
+              type="button"
+              id="hostPresent"
+              value={true}
+              onClick={onChange}
+            >
+              Yes
+            </button>
+            <button
+              class={
+                !hostPresent
+                  ? 'btn btn-secondary w-full'
+                  : 'btn btn-warning w-full'
+              }
+              type="button"
+              id="hostPresent"
+              value={false}
+              onClick={onChange}
+            >
+              No
+            </button>
+          </div>
+        </div>
+        <div className="input-div">
+          <label className="label text-3xl">Food Provided: </label>
+          <div className="flex flex-col justify-center w-full space-y-1">
+            <button
+              class={food ? 'btn btn-secondary' : 'btn btn-warning'}
+              type="button"
+              id="food"
+              value={true}
+              onClick={onChange}
+            >
+              Yes
+            </button>
+            <button
+              class={!food ? 'btn btn-secondary' : 'btn btn-warning'}
+              type="button"
+              id="food"
+              value={false}
+              onClick={onChange}
+            >
+              No
+            </button>
+          </div>
+        </div>
+        <div className="input-div">
+          <label className="label text-3xl">Address: </label>
+          <textarea
+            className="textarea textarea-bordered textarea-secondary"
             id="address"
             type="text"
             value={address}
@@ -367,8 +372,8 @@ const CreateLocation = () => {
           ></textarea>
         </div>
         {!geolocationEnabled && (
-          <div>
-            <label>Latitude</label>
+          <div className="input-div">
+            <label className="label text-3xl">Latitude</label>
             <input
               className="input-el"
               type="number"
@@ -377,8 +382,8 @@ const CreateLocation = () => {
               onChange={onChange}
               required
             />
-            <div>
-              <label>Longitude</label>
+            <div className="input-div">
+              <label className="label text-3xl">Longitude</label>
               <input
                 className="input-el"
                 type="number"
@@ -390,8 +395,8 @@ const CreateLocation = () => {
             </div>
           </div>
         )}
-        <div>
-          <label>Price</label>
+        <div className="input-div">
+          <label className="label text-3xl">Price:</label>
           <input
             className="input-el"
             type="number"
@@ -401,10 +406,10 @@ const CreateLocation = () => {
             required
           />
         </div>
-        <div>
-          <label>Images</label>
+        <div className="w-full grid grid-cols-1 md:grid-cols-2">
+          <label className="label mx-auto text-center text-3xl md:mx-0">Images:</label>
           <input
-            className="file-input file-input-bordered file-input-warning w-full max-w-xs"
+            className="file-input file-input-bordered file-input-warning w-full mx-auto max-w-xs"
             type="file"
             id={images}
             onChange={onChange}
