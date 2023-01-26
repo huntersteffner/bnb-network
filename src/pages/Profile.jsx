@@ -65,53 +65,62 @@ const Profile = () => {
   }, [auth.currentUser.uid])
 
   return (
-    <div className="container mx-auto">
-      <div className="flex flex-col justify-center items-center">
-        <div className="flex">
-          <h1 className="text-3xl font-bold">{`${name}'s profile`}</h1>
-          <button onClick={onLogout} className="btn btn-secondary btn-outline">
+    <>
+      <div className="bg-neutral py-3">
+        <div className="flex justify-around items-center w-full">
+          <h1 className="text-3xl text-neutral-content font-bold">{`${name}'s profile`}</h1>
+          <button
+            onClick={onLogout}
+            className="btn btn-secondary justify-items-end"
+          >
             Logout
           </button>
         </div>
-        <div>
+      </div>
+      <div className="container mx-auto">
+        <div className="flex flex-col w-full justify-center items-center">
           <div>
-            <p>Next Trip</p>
-            <p>Beautiful Beach Condo</p>
-            <p>Sept 13, 2023 - Sept 19, 2023</p>
-            <p>img</p>
+            <div>
+              <p className='title'>Most Recent Trip</p>
+              <p>Beautiful Beach Condo</p>
+              <p>Sept 13, 2023 - Sept 19, 2023</p>
+              <p>img</p>
+            </div>
+            <div>
+              <p>Last Trip</p>
+              <p>Beautiful Beach Condo</p>
+              <p>Sept 13, 2023 - Sept 19, 2023</p>
+              <p>img</p>
+            </div>
+            <div className="flex justify-center items-center space-x-2">
+              <p className='text-xl font-bold'>See complete trip history</p>
+              <Link to="/history">
+                <button className="btn btn-primary">Click Here</button>
+              </Link>
+            </div>
           </div>
           <div>
-            <p>Last Trip</p>
-            <p>Beautiful Beach Condo</p>
-            <p>Sept 13, 2023 - Sept 19, 2023</p>
-            <p>img</p>
-          </div>
-          <div className="flex justify-center items-center">
-            <p>See complete trip history</p>
-            <Link to="/history">
-              <button className="btn btn-primary">Click Here</button>
+            <h2 className='title'>Your Properties</h2>
+            <Link to="/create-location">
+              <button className="btn">Add New Property</button>
             </Link>
-          </div>
-        </div>
-        <div>
-          <h2>Your Properties</h2>
-          <Link to='/create-location'>
-            <button className='btn'>Add New Property</button>
-          </Link>
-          <div>
-            {!loading && listings?.length > 0 ? (
-              <>
-                <p>{listings[0].data.name}</p>
-                <img src={listings[0].data.imgUrls[0]} alt="" />
-                <Link to={`/edit-location/${listings[0].id}`}>Edit</Link>
-              </>
-            ) : (<p>You have not posted any properties</p>)}
-            <p>Title</p>
-            <p>img</p>
+            <div>
+              {!loading && listings?.length > 0 ? (
+                <>
+                  <p>{listings[0].data.name}</p>
+                  <img src={listings[0].data.imgUrls[0]} alt="" />
+                  <Link to={`/edit-location/${listings[0].id}`}>Edit</Link>
+                </>
+              ) : (
+                <p>You have not posted any properties</p>
+              )}
+              <p>Title</p>
+              <p>img</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
