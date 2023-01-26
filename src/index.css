@@ -6,6 +6,16 @@
     @apply text-center font-bold text-3xl md:text-5xl; 
 }
 
+.explore-card {
+    @apply card justify-center items-center py-4 w-96 bg-base-100 shadow-xl my-3 md:mx-3;
+}
+.explore-title {
+    @apply text-2xl font-bold;
+}
+.explore-link {
+    @apply object-cover w-[22rem] h-[15rem];
+}
+
 .input-el {
     @apply input input-bordered input-secondary;
 }

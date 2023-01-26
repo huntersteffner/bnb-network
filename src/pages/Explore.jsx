@@ -11,32 +11,32 @@ const Explore = () => {
     <>
       <Carousel />
       <h1 className="title">What type of BNB are you looking for?</h1>
-      <div className="">
-        <div className="card w-96 bg-base-100 shadow-xl">
-          <Link to="/explore-results/house">
-          <p className="text-2xl font-bold">House</p>
+      <div className="flex flex-col justify-center items-center md:flex-row md:flex-wrap">
+        
+          <Link className="explore-card" to="/explore-results/house">
+            <p className="explore-title">House</p>
             <img
-              className="object-cover w-[22rem] h-[15rem]"
+              className="explore-link"
               src={houseLink}
               alt="House"
             />
           </Link>
-        </div>
-        <Link to="/explore-results/condo">
-          <img src={condoLink} alt="Condo" />
-          <p>Condo</p>
+        
+        <Link className="explore-card" to="/explore-results/condo">
+          <p className='explore-title'>Condo</p>
+          <img className="explore-link" src={condoLink} alt="Condo" />
         </Link>
-        <Link to="/explore-results/cabin">
-          <img src={cabinLink} alt="Cabin" />
-          <p>Cabin</p>
+        <Link className="explore-card" to="/explore-results/cabin">
+          <p className='explore-title'>Cabin</p>
+          <img className="explore-link" src={cabinLink} alt="Cabin" />
         </Link>
-        <Link to="/explore-results/apartment">
-          <img src={apartmentLink} alt="Apartment" />
-          <p>Apartment</p>
+        <Link className="explore-card" to="/explore-results/apartment">
+          <p className='explore-title'>Apartment</p>
+          <img className="explore-link" src={apartmentLink} alt="Apartment" />
         </Link>
-        <Link to="/explore-results/room">
-          <img src={roomLink} alt="Room" />
-          <p>Room</p>
+        <Link className="explore-card" to="/explore-results/room">
+          <p className='explore-title'>Room</p>
+          <img className="explore-link" src={roomLink} alt="Room" />
         </Link>
       </div>
     </>
