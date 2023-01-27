@@ -234,7 +234,7 @@ const ViewLocation = () => {
             direction="horizontal"
           />
           {/* <DateRangePicker/> */}
-          <button type="submit" className="btn btn-warning">
+          <button type="submit" className="btn btn-warning my-3">
             Book
           </button>
         </form>

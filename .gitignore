@@ -18,8 +18,7 @@
 .env.test.local
 .env.production.local
 
-# firebase file for now
-/src/firebase.config.js
+
 # listing.json
 listings.json
 

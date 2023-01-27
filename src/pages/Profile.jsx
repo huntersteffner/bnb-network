@@ -19,7 +19,7 @@ const Profile = () => {
   const auth = getAuth()
   const [loading, setLoading] = useState(true)
   const [listings, setListings] = useState(null)
-  // const [history, setHistory] = useState(null)
+  const [history, setHistory] = useState(null)
   const [changeDetails, setChangeDetails] = useState(false)
   const [formData, setFormData] = useState({
     name: auth.currentUser.displayName,
@@ -64,35 +64,33 @@ const Profile = () => {
 
     fetchListings()
   }, [auth.currentUser.uid])
-  // useEffect(() => {
-  //   const fetchListings = async () => {
-  //     const historyData = collection(db, 'bookedTrips')
+  useEffect(() => {
+    const fetchListings = async () => {
+      const historyData = collection(db, 'bookedTrips')
 
-  //     const q = query(
-  //       historyData,
-  //       where('customerId', '==', auth.currentUser.uid),
-  //       orderBy('timestamp', 'desc')
-  //     )
+      const q = query(
+        historyData,
+        where('customerId', '==', auth.currentUser.uid),
+        orderBy('timestamp', 'desc')
+      )
 
-  //     const queryData = await getDocs(q)
+      const queryData = await getDocs(q)
 
-  //     const history = []
+      const history = []
 
-  //     queryData.forEach((doc) => {
-  //       return history.push({
-  //         id: doc.id,
-  //         data: doc.data(),
-  //       })
-  //     })
+      queryData.forEach((doc) => {
+        return history.push({
+          id: doc.id,
+          data: doc.data(),
+        })
+      })
 
-  //     setHistory(history)
-  //     setLoading(false)
+      setHistory(history)
+      setLoading(false)
+    }
 
-      
-  //   }
-
-  //   fetchListings()
-  // }, [auth.currentUser.uid])
+    fetchListings()
+  }, [auth.currentUser.uid])
 
   return (
     <>
@@ -112,9 +110,22 @@ const Profile = () => {
           <div className="card justify-center items-center py-4 w-96 bg-base-100 shadow-xl px-4 my-3">
             <div className="card-body">
               <p className="title">Most Recent Trip</p>
-              <p className="text-2xl">Beautiful Beach Condo</p>
-              <p className="text-xl">Sept 13, 2023 - Sept 19, 2023</p>
-              <p>img</p>
+              {!loading && history?.length > 0 ? (
+                <>
+                  <p className="text-2xl">{history[0].data.locationName}</p>
+                  <img
+                    className="explore-link"
+                    src={history[0].data.image}
+                    alt="Last Booked Trip"
+                  />
+                  <p className="text-2xl">{history[0].data.locationDates}</p>
+                </>
+              ) : (
+                <>
+                  <p className="text-2xl">You haven't booked any trips yet.</p>
+                </>
+              )}
+
               <div className="flex justify-center items-center">
                 <p className="text-xl font-bold text-center w-[40%]">
                   See complete trip history
@@ -134,15 +145,19 @@ const Profile = () => {
               {!loading && listings?.length > 0 ? (
                 <>
                   {listings.map((listing, index) => (
-                    <div className='bg-base-100'>
-                      <img className='explore-link' src={listing.data.imgUrls[0]} alt={`Location ${index +1}`} />
-                      <p className='card-title'>{listing.data.name}</p>
+                    <div className="bg-base-100">
+                      <img
+                        className="explore-link"
+                        src={listing.data.imgUrls[0]}
+                        alt={`Location ${index + 1}`}
+                      />
+                      <p className="card-title">{listing.data.name}</p>
                       <p>{listing.data.location}</p>
-                      <Link to={`/edit-location/${listing.id}`}><button className='btn btn-warning w-full'>Edit</button></Link>
+                      <Link to={`/edit-location/${listing.id}`}>
+                        <button className="btn btn-warning w-full">Edit</button>
+                      </Link>
                     </div>
                   ))}
-                  
-                  
                 </>
               ) : (
                 <p className="font-bold text-xl text-center">
