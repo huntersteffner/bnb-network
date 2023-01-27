@@ -51,7 +51,7 @@ const Carousel = () => {
     listings && (
       <>
 
-      <Swiper slidesPerView={1} navigation={true} modules={[Navigation]} pagination={{clickable: true}}>
+      <Swiper slidesPerView={1.1} modules={[Navigation]} pagination={{clickable: true}}>
         {listings.map(({data,id}) => (
           <SwiperSlide key={id} onClick={()=> navigate(`/view-location/${id}`)}>
             <div style={{
