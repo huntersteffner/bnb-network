@@ -69,6 +69,7 @@ const ExploreResults = () => {
                 <div className="card-body">
                   <img src={listing.data.imgUrls[0]} alt="Listing" />
                   <p>{listing.data.location}</p>
+                  <p>${listing.data.price}/night</p>
 
                   <Link to={`/view-location/${listing.id}`}>
                     <button className="btn btn-warning">

@@ -11,6 +11,7 @@ const Explore = () => {
     <div className='min-h-screen'>
       <Carousel />
       <h1 className="title">What type of BNB are you looking for?</h1>
+      <h2 className='title'>Click Below</h2>
       <div className="flex flex-col justify-center items-center md:flex-row md:flex-wrap">
         
           <Link className="explore-card" to="/explore-results/house">

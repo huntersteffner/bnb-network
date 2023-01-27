@@ -3,6 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore'
 import { db } from '../firebase.config'
 import Loading from './Loading'
+import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import 'swiper/css/scrollbar'
+import 'swiper/css/a11y'
 
 const Carousel = () => {
   const [loading, setLoading] = useState(true)
@@ -43,34 +50,21 @@ const Carousel = () => {
   return (
     listings && (
       <>
-        <div className="carousel carousel-end rounded-box">
-          {listings.map(({ data, id }) => (
-            <div className="carousel-item h-[50vh]">
-              <img onClick={() => navigate(`/view-location/${id}`)} src={data.imgUrls[0]} alt="Drink" />
+
+      <Swiper slidesPerView={1} navigation={true} modules={[Navigation]} pagination={{clickable: true}}>
+        {listings.map(({data,id}) => (
+          <SwiperSlide key={id} onClick={()=> navigate(`/view-location/${id}`)}>
+            <div style={{
+              background: `url(${data.imgUrls[0]}) center no-repeat`,
+              backgroundSize: 'cover',
+              height: "50vw"
+            }}>
+              
             </div>
-          ))}
-          {/* <div className="carousel-item">
-            <img src="https://placeimg.com/400/300/arch" alt="Drink" />
-          </div>
-          <div className="carousel-item">
-            <img src="https://placeimg.com/400/300/arch" alt="Drink" />
-          </div>
-          <div className="carousel-item">
-            <img src="https://placeimg.com/400/300/arch" alt="Drink" />
-          </div>
-          <div className="carousel-item">
-            <img src="https://placeimg.com/400/300/arch" alt="Drink" />
-          </div>
-          <div className="carousel-item">
-            <img src="https://placeimg.com/400/300/arch" alt="Drink" />
-          </div>
-          <div className="carousel-item">
-            <img src="https://placeimg.com/400/300/arch" alt="Drink" />
-          </div>
-          <div className="carousel-item">
-            <img src="https://placeimg.com/400/300/arch" alt="Drink" />
-          </div> */}
-        </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+        
       </>
     )
   )

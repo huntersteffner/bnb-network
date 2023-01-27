@@ -163,17 +163,18 @@ const ViewLocation = () => {
   }
 
   return (
-    <div>
+    <div className='flex flex-col justify-center items-center'>
       <h1>{listing.name}</h1>
       <img src={listing.imgUrls[0]} alt="" />
       <p>Book rooms</p>
       {/* <DateRangePicker showOneCalendar /> */}
       {/* <DateRangePicker/> */}
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} className='flex flex-col'>
         {/* <input readOnly value={calendar} /> */}
         {/* <Calendar date={new Date()} onChange={calendarHandler}/> */}
         <input
           id="dateRange"
+          className='hidden'
           readOnly
           onChange={onChange}
           value={`${format(range[0].startDate, 'MM/dd/yyyy')} to ${format(
@@ -189,6 +190,7 @@ const ViewLocation = () => {
           moveRangeOnFirstSelection={false}
           ranges={range}
           months={1}
+          minDate={addDays(new Date(), 0)}
           direction="horizontal"
         />
         {/* <DateRangePicker/> */}
