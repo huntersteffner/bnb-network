@@ -63,11 +63,11 @@ const ExploreResults = () => {
           <Loading />
         ) : listings && listings.length > 0 ? (
           <>
-            {listings.map((listing) => (
+            {listings.map((listing, index) => (
               <div className="explore-card">
                 <p className="card-title">{listing.data.name}</p>
                 <div className="card-body">
-                  <img src={listing.data.imgUrls[0]} alt="Listing" />
+                  <img className='explore-link' src={listing.data.imgUrls[0]} alt={`Location ${index +1}`} />
                   <p>{listing.data.location}</p>
                   <p>${listing.data.price}/night</p>
 

@@ -39,7 +39,7 @@ const Login = () => {
     }
   }
   return (
-    <div className='min-h-[80vh] flex flex-col justify-center items-center'>
+    <div className="min-h-[80vh] flex flex-col justify-center items-center">
       <form
         onSubmit={onSubmit}
         className="form-control container mx-auto flex flex-col items-center justify-center"

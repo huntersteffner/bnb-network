@@ -19,6 +19,7 @@ const Profile = () => {
   const auth = getAuth()
   const [loading, setLoading] = useState(true)
   const [listings, setListings] = useState(null)
+  // const [history, setHistory] = useState(null)
   const [changeDetails, setChangeDetails] = useState(false)
   const [formData, setFormData] = useState({
     name: auth.currentUser.displayName,
@@ -63,6 +64,35 @@ const Profile = () => {
 
     fetchListings()
   }, [auth.currentUser.uid])
+  // useEffect(() => {
+  //   const fetchListings = async () => {
+  //     const historyData = collection(db, 'bookedTrips')
+
+  //     const q = query(
+  //       historyData,
+  //       where('customerId', '==', auth.currentUser.uid),
+  //       orderBy('timestamp', 'desc')
+  //     )
+
+  //     const queryData = await getDocs(q)
+
+  //     const history = []
+
+  //     queryData.forEach((doc) => {
+  //       return history.push({
+  //         id: doc.id,
+  //         data: doc.data(),
+  //       })
+  //     })
+
+  //     setHistory(history)
+  //     setLoading(false)
+
+      
+  //   }
+
+  //   fetchListings()
+  // }, [auth.currentUser.uid])
 
   return (
     <>
@@ -103,9 +133,10 @@ const Profile = () => {
             <div className="card-body">
               {!loading && listings?.length > 0 ? (
                 <>
-                  {listings.map((listing) => (
+                  {listings.map((listing, index) => (
                     <div className='bg-base-100'>
-                      <p>{listing.data.name}</p>
+                      <img className='explore-link' src={listing.data.imgUrls[0]} alt={`Location ${index +1}`} />
+                      <p className='card-title'>{listing.data.name}</p>
                       <p>{listing.data.location}</p>
                       <Link to={`/edit-location/${listing.id}`}><button className='btn btn-warning w-full'>Edit</button></Link>
                     </div>

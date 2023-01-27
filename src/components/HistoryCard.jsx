@@ -4,7 +4,7 @@ const HistoryCard = ({ listing, id }) => {
   return (
     <div className="card w-96 bg-base-100 shadow-xl lg:w-1/2">
       <figure>
-        <img src={listing.image} alt="Shoes" />
+        <img className='explore-link' src={listing.image} alt={`Location: ${id}`} />
       </figure>
       <div className="card-body m-3">
         <h2 className="card-title">{listing.locationName}</h2>

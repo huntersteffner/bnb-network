@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { GoogleMap, useLoadScript, MarkerF  } from '@react-google-maps/api'
+import { GoogleMap, useLoadScript, MarkerF } from '@react-google-maps/api'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import {
   getDoc,
@@ -56,7 +56,9 @@ const ViewLocation = () => {
   const auth = getAuth()
   const isMounted = useRef(true)
 
-  const {} = useLoadScript({googleMapsApiKey: process.env.REACT_APP_GEOCODE_API_KEY})
+  const {} = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_GEOCODE_API_KEY,
+  })
 
   useEffect(() => {
     if (isMounted) {
@@ -130,27 +132,6 @@ const ViewLocation = () => {
     e.preventDefault()
     setLoading(true)
 
-    // if(dateRange === '') {
-    //   setLoading(false)
-    //   alert('Please enter date range')
-    // }
-
-    // await setDateRangeForSubmit({
-    //   // locationDates: `${format(range[0].startDate, 'MM/dd/yyyy')} to ${format(
-    //   //   range[0].endDate,
-    //   //   'MM/dd/yyyy'
-    //   // )}`,
-    //   locationDates: dateString,
-    //   locationAddress: listing.location,
-    //   customerId: auth.currentUser.uid,
-    //   image: listing.imgUrls[0],
-    //   locationId: params.locationId,
-    //   locationName: listing.name,
-    //   timestamp: serverTimestamp(),
-    //   type: listing.type,
-    //   ownerId: listing.userRef,
-    // })
-
     const docRef = await addDoc(
       collection(db, 'bookedTrips'),
       dateRangeForSubmit
@@ -169,8 +150,6 @@ const ViewLocation = () => {
 
     console.log(dateRangeForSubmit)
   }
-
-  
 
   return (
     <>
@@ -215,15 +194,24 @@ const ViewLocation = () => {
             </p>
           </div>
         </div>
-                <GoogleMap zoom={10} center={{lat: listing.geolocation.lat, lng: listing.geolocation.lng}} mapContainerClassName='w-full h-[20vh] md:w-[50%]'>
-                  <MarkerF position={{lat: listing.geolocation.lat, lng: listing.geolocation.lng}}/>
-                </GoogleMap>
-        <p>Book rooms</p>
-        {/* <DateRangePicker showOneCalendar /> */}
-        {/* <DateRangePicker/> */}
+        <GoogleMap
+          zoom={10}
+          center={{
+            lat: listing.geolocation.lat,
+            lng: listing.geolocation.lng,
+          }}
+          mapContainerClassName="w-full h-[50vh] md:h-[20vh] md:w-[50%]"
+        >
+          <MarkerF
+            position={{
+              lat: listing.geolocation.lat,
+              lng: listing.geolocation.lng,
+            }}
+          />
+        </GoogleMap>
+        <p className="title">Book rooms</p>
+
         <form onSubmit={onSubmit} className="flex flex-col">
-          {/* <input readOnly value={calendar} /> */}
-          {/* <Calendar date={new Date()} onChange={calendarHandler}/> */}
           <input
             id="dateRange"
             className="hidden"
@@ -246,7 +234,7 @@ const ViewLocation = () => {
             direction="horizontal"
           />
           {/* <DateRangePicker/> */}
-          <button type="submit" className="btn">
+          <button type="submit" className="btn btn-warning">
             Book
           </button>
         </form>
