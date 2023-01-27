@@ -2,10 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Title lines */
 .title {
     @apply text-center font-bold text-3xl md:text-5xl; 
 }
 
+/* Explore card was reused throughout the project */
 .explore-card {
     @apply card justify-center items-center py-4 w-96 bg-base-100 shadow-xl my-3 md:mx-3;
 }
@@ -16,6 +18,7 @@
     @apply object-cover w-[22rem] h-[15rem];
 }
 
+/* Inputs for forms */
 .input-el {
     @apply input input-bordered input-secondary;
 }

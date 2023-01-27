@@ -24,7 +24,7 @@ function App() {
           <Route path='/explore-results/:locationType' element={<ExploreResults/>} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          {/* <Route path="/history" element={<History />} /> */}
+          {/* Restricted route uses authentication to prevent people from accessing unless they are logged in. */}
           <Route path="/history" element={<RestrictedRoute />}>
             <Route path="/history" element={<History />} />
           </Route>

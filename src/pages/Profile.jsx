@@ -1,15 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { getAuth, updateProfile } from 'firebase/auth'
+import { getAuth } from 'firebase/auth'
 import {
-  updateDoc,
-  doc,
   collection,
   getDocs,
   query,
   where,
   orderBy,
-  deleteDoc,
 } from 'firebase/firestore'
 import { db } from '../firebase.config'
 
@@ -20,7 +17,6 @@ const Profile = () => {
   const [loading, setLoading] = useState(true)
   const [listings, setListings] = useState(null)
   const [history, setHistory] = useState(null)
-  const [changeDetails, setChangeDetails] = useState(false)
   const [formData, setFormData] = useState({
     name: auth.currentUser.displayName,
     email: auth.currentUser.email,
@@ -28,11 +24,13 @@ const Profile = () => {
 
   const { name, email } = formData
 
+  // Logout button
   const onLogout = () => {
     auth.signOut()
     navigate('/')
   }
 
+  // It calls every location that this user has published as owning
   useEffect(() => {
     const fetchListings = async () => {
       const listingsData = collection(db, 'listings')
@@ -47,8 +45,6 @@ const Profile = () => {
 
       const listings = []
 
-      console.log(query)
-
       queryData.forEach((doc) => {
         return listings.push({
           id: doc.id,
@@ -58,12 +54,11 @@ const Profile = () => {
 
       setListings(listings)
       setLoading(false)
-
-      console.log(listings)
     }
 
     fetchListings()
   }, [auth.currentUser.uid])
+  // Pulls trips that user has booked in the past
   useEffect(() => {
     const fetchListings = async () => {
       const historyData = collection(db, 'bookedTrips')
@@ -110,6 +105,7 @@ const Profile = () => {
           <div className="card justify-center items-center py-4 w-96 bg-base-100 shadow-xl px-4 my-3">
             <div className="card-body">
               <p className="title">Most Recent Trip</p>
+              {/* After loading, it shows the most recent trip user has been on with a link to see full history */}
               {!loading && history?.length > 0 ? (
                 <>
                   <p className="text-2xl">{history[0].data.locationName}</p>
@@ -138,10 +134,12 @@ const Profile = () => {
           </div>
           <div className="card justify-center items-center py-4 w-96 bg-base-100 shadow-xl my-3">
             <h2 className="title">Your Properties</h2>
+            {/* Link to create new location */}
             <Link to="/create-location">
               <button className="btn btn-primary mt-5">Add New Property</button>
             </Link>
             <div className="card-body">
+              {/* After loading, it shows every location the user has published, or it says that no locations have been published */}
               {!loading && listings?.length > 0 ? (
                 <>
                   {listings.map((listing, index) => (

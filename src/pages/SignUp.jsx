@@ -18,6 +18,7 @@ const SignUp = () => {
 
   const { name, email, password } = formData
 
+  // Runs on every keystroke
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -25,9 +26,11 @@ const SignUp = () => {
     }))
   }
 
+  // When user hits sign up
   const onSubmit = async (e) => {
     e.preventDefault()
 
+    // Generates user
     try {
       const auth = getAuth()
       const userCredential = await createUserWithEmailAndPassword(
@@ -43,9 +46,8 @@ const SignUp = () => {
       delete formDataCopy.password
       formDataCopy.timestamp = serverTimestamp()
       await setDoc(doc(db, 'users', user.uid), formDataCopy)
-      navigate('/')
+      navigate('/login')
     } catch (error) {
-      console.log(error)
       alert('Something went wrong with registration.')
     }
   }
@@ -94,6 +96,7 @@ const SignUp = () => {
         </button>
       </form>
       <div className="flex justify-center items-center space-x-3 mt-3">
+        {/* Redirect to login page */}
         <h2 className="text-2xl">Already a Member?</h2>
         <Link to="/Login">
           <button className="btn btn-accent">Click Here</button>

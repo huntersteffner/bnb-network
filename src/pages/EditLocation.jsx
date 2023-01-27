@@ -14,9 +14,13 @@ import Loading from '../components/Loading'
 import { async } from '@firebase/util'
 
 const EditLocation = () => {
+  // This is to determine if browsers are set to geolocate
   const [geolocationEnabled, setGeolocationEnabled] = useState(true)
+  // Loading state
   const [loading, setLoading] = useState(false)
+  // Pull existing listing data
   const [listing, setListing] = useState(false)
+  // Form data
   const [formData, setFormData] = useState({
     type: 'house',
     name: '',
@@ -30,7 +34,7 @@ const EditLocation = () => {
     latitude: 0,
     longitude: 0,
   })
-
+  // Destructuring for use in form
   const {
     type,
     name,
@@ -50,12 +54,15 @@ const EditLocation = () => {
   const isMounted = useRef(true)
   const params = useParams()
 
+  // Determines of user who is logged in matches the owner of this property
   useEffect(() => {
     if (listing && listing.userRef !== auth.currentUser.uid) {
+      // If not, redirected to explore page
       navigate('/')
     }
   })
 
+  // Fetching location data
   useEffect(() => {
     setLoading(true)
     const fetchLocation = async () => {
@@ -72,6 +79,7 @@ const EditLocation = () => {
     fetchLocation()
   }, [params.locationId, navigate])
 
+  // If user is not logged in, he/she is redirected to login page.
   useEffect(() => {
     if (isMounted) {
       onAuthStateChanged(auth, (user) => {
@@ -91,7 +99,9 @@ const EditLocation = () => {
     }
   }, [isMounted])
 
+  // This function will run on every keystroke that is entered in the form.
   const onChange = (e) => {
+    // For true or false questions, this boolean is used
     let boolean = null
     if (e.target.value === 'true') {
       boolean = true
@@ -100,6 +110,7 @@ const EditLocation = () => {
       boolean = false
     }
 
+    // If the input is a file
     if (e.target.files) {
       setFormData((prevState) => ({
         ...prevState,
@@ -107,6 +118,7 @@ const EditLocation = () => {
       }))
     }
 
+    // Text/boolean/numbers
     if (!e.target.files) {
       setFormData((prevState) => ({
         ...prevState,
@@ -115,19 +127,23 @@ const EditLocation = () => {
     }
   }
 
+  // When user submits the form
   const onSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
 
+    // Calling variables for further use later
     let geolocation = {}
     let location
 
+    // There can only be six images
     if (images.length > 6) {
       setLoading(false)
       alert('Max 6 images')
       return
     }
 
+    // API call for geocode api key
     if (geolocationEnabled) {
       const response = await fetch(
         `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.REACT_APP_GEOCODE_API_KEY}`
@@ -135,16 +151,17 @@ const EditLocation = () => {
 
       const data = await response.json()
 
-      console.log(data)
-
+      // Setting latitude and longitude
       geolocation.lat = data.results[0]?.geometry.location.lat ?? 0
       geolocation.lng = data.results[0]?.geometry.location.lng ?? 0
 
+      // Need a valid entry
       location =
         data.status === 'ZERO_RESULTS'
           ? undefined
           : data.results[0]?.formatted_address
 
+      // Location is undefined
       if (location === undefined || location.includes('undefined')) {
         setLoading(false)
         alert('Please enter valid address')
@@ -156,15 +173,18 @@ const EditLocation = () => {
       geolocation.lng = longitude
     }
 
+    // Storing an image
     const storeImg = async (image) => {
       return new Promise((res, rej) => {
         const storage = getStorage()
+        // Creating file name for image
         const fileName = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`
 
         const storageRef = ref(storage, 'images/' + fileName)
 
         const uploadImages = uploadBytesResumable(storageRef, image)
 
+        // Uploading image
         uploadImages.on(
           'state_changed',
           (snapshot) => {
@@ -195,7 +215,7 @@ const EditLocation = () => {
         )
       })
     }
-
+    // Image urls for firebase
     const imgUrls = await Promise.all(
       [...images].map((image) => storeImg(image))
     ).catch(() => {
@@ -203,6 +223,7 @@ const EditLocation = () => {
       alert('Images not uploaded')
       return
     })
+    // Duplicate to prepare for push of new information
     const formDataDuplicate = {
       ...formData,
       imgUrls,
@@ -214,6 +235,7 @@ const EditLocation = () => {
     delete formDataDuplicate.images
     delete formDataDuplicate.address
 
+    // Edit information in firebase
     const docRef = doc(db, 'listings', params.locationId)
     await updateDoc(docRef, formDataDuplicate)
 
@@ -222,9 +244,14 @@ const EditLocation = () => {
     navigate('/')
   }
 
+  if (loading) {
+    return <Loading />
+  }
+
   return (
     <>
       <div className="container mx-auto">
+        {/* Form */}
         <form
           onSubmit={onSubmit}
           className="flex flex-col justify-center items-center m-3 space-y-2"
@@ -235,6 +262,7 @@ const EditLocation = () => {
             <div className="flex flex-col   w-full space-y-2 lg:flex-row lg:space-y-0 lg:flex-wrap lg:justify-center lg:items-center">
               <button
                 type="button"
+                // Button changes color depending on which is selected. Same for other buttons
                 className={`lg:w-1/4 m-1 ${
                   type === 'house' ? 'btn btn-secondary' : 'btn btn-warning'
                 }`}
@@ -328,6 +356,7 @@ const EditLocation = () => {
           <div className="input-div">
             <label className="label text-3xl">Host Present: </label>
             <div className="flex flex-col justify-center w-full space-y-1">
+              {/* Buttons change color depending on whether or not yes or no is selected. Same for other buttons*/}
               <button
                 class={
                   hostPresent
@@ -441,8 +470,8 @@ const EditLocation = () => {
             />
           </div>
           <button className="btn btn-primary w-full my-3" type="submit">
-          Submit Location
-        </button>
+            Submit Location
+          </button>
         </form>
       </div>
     </>

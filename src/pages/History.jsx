@@ -1,10 +1,8 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useState, useEffect,  } from 'react'
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { getAuth,} from 'firebase/auth'
 import { db } from '../firebase.config'
 import {
-  updateDoc,
-  doc,
   collection,
   getDocs,
   query,
@@ -21,10 +19,12 @@ const History = () => {
   const [loading, setLoading] = useState(true)
   const [listings, setListings] = useState(null)
 
+  // Fetches previously booked trips
   useEffect(() => {
     const fetchListings = async () => {
       const listingsData = collection(db, 'bookedTrips')
 
+      // It specifies to only book the trips that have booked by the current user
       const q = query(
         listingsData,
         where('customerId', '==', auth.currentUser.uid),
@@ -44,8 +44,6 @@ const History = () => {
 
       setListings(listings)
       setLoading(false)
-
-      console.log(listings)
     }
 
     fetchListings()
@@ -55,6 +53,7 @@ const History = () => {
     <div className='container mx-auto min-h-screen'>
       <h1 className='title'>Your Trip History</h1>
       <div className='flex flex-col justify-center items-center space-y-6 my-3'>
+        {/* After it's done loading it either loads every location the logged in user has previously booked in the base, or it says that no trips have been booked */}
         {loading ? (
           <Loading />
         ) : listings && listings.length > 0 ? (

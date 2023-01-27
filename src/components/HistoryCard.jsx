@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 
 const HistoryCard = ({ listing, id }) => {
+  // History Card info is passed by props
   return (
     <div className="card w-96 bg-base-100 shadow-xl lg:w-1/2">
       <figure>

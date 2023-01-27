@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { GoogleMap, useLoadScript, MarkerF } from '@react-google-maps/api'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import {
   getDoc,
   doc,
@@ -11,14 +11,12 @@ import {
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { db } from '../firebase.config'
 import Loading from '../components/Loading'
-// import { DateRangePicker } from 'react-date-range'
-import { Calendar, DateRange, DateRangePicker } from 'react-date-range'
+import { DateRange } from 'react-date-range'
 import format from 'date-fns/format'
 import 'react-date-range/dist/styles.css' // main css file
 import 'react-date-range/dist/theme/default.css' // theme css file
 import { addDays } from 'date-fns/esm'
 import { v4 as uuidv4 } from 'uuid'
-import Carousel from '../components/Carousel'
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
@@ -28,14 +26,10 @@ import 'swiper/css/scrollbar'
 import 'swiper/css/a11y'
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y])
 
-// import { DateRangePicker } from 'rsuite'
-// import 'rsuite/dist/styles/rsuite-default.css'
-
 const ViewLocation = () => {
   const [listing, setListing] = useState(null)
   const [loading, setLoading] = useState(true)
-  // const [lastFetchedListing, setLastFetchedListing] = useState(null)
-
+  // Date range for booking a trip
   const [dateRangeForSubmit, setDateRangeForSubmit] = useState({})
 
   let currentUser = ''
@@ -43,8 +37,6 @@ const ViewLocation = () => {
 
   const [range, setRange] = useState([
     {
-      // startDate: new Date(),
-      // endDate: addDays(new Date(), 7),
       startDate: new Date(),
       endDate: new Date(),
       key: 'selection',
@@ -56,10 +48,12 @@ const ViewLocation = () => {
   const auth = getAuth()
   const isMounted = useRef(true)
 
+  // For google maps api key
   const {} = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GEOCODE_API_KEY,
   })
 
+  // If user is not logged in, redirect to login page
   useEffect(() => {
     if (isMounted) {
       onAuthStateChanged(auth, (user) => {
@@ -77,18 +71,16 @@ const ViewLocation = () => {
 
   let dateString = ''
 
+  // Setting date string based on selected days
   useEffect(() => {
     dateString = `${format(range[0].startDate, 'MM/dd/yyyy')} to ${format(
       range[0].endDate,
       'MM/dd/yyyy'
     )}`
 
+    // Preparing to post booked day
     const prepareToPost = async () => {
       await setDateRangeForSubmit({
-        // locationDates: `${format(range[0].startDate, 'MM/dd/yyyy')} to ${format(
-        //   range[0].endDate,
-        //   'MM/dd/yyyy'
-        // )}`,
         locationDates: dateString,
         locationAddress: listing.location,
         customerId: auth.currentUser.uid,
@@ -110,6 +102,7 @@ const ViewLocation = () => {
     }
   })
 
+  // Pull location that matches location ID
   useEffect(() => {
     const fetchListing = async () => {
       const docRef = doc(db, 'listings', params.locationId)
@@ -128,6 +121,7 @@ const ViewLocation = () => {
     return <Loading />
   }
 
+  // When you select to book location
   const onSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
@@ -138,21 +132,21 @@ const ViewLocation = () => {
     )
 
     setLoading(false)
-    // navigate('/history')
+    navigate('/history')
   }
 
+  // When you change the date range
   const onChange = (e) => {
     const input = document.getGetElementById('dateRange').value()
-    console.log(input)
+
     setDateRangeForSubmit({
       locationDates: e.target.value,
     })
-
-    console.log(dateRangeForSubmit)
   }
 
   return (
     <>
+      {/* It shows 1.05 so that users can see that there are other slides to view */}
       <Swiper slidesPerView={1.05} pagination={{ clickable: true }}>
         {listing.imgUrls.map((url, index) => (
           <SwiperSlide key={index}>
@@ -168,8 +162,6 @@ const ViewLocation = () => {
         ))}
       </Swiper>
       <div className="flex flex-col justify-center items-center">
-        {/* <img src={listing.imgUrls[0]} alt="" /> */}
-
         <div className="explore-card">
           <h1 className="title">{listing.name}</h1>
           <div className="card-body">
@@ -194,6 +186,7 @@ const ViewLocation = () => {
             </p>
           </div>
         </div>
+        {/* Google maps */}
         <GoogleMap
           zoom={10}
           center={{
@@ -202,6 +195,7 @@ const ViewLocation = () => {
           }}
           mapContainerClassName="w-full h-[50vh] md:h-[20vh] md:w-[50%]"
         >
+          {/* Where the marker goes. It pulls lat and lng from firebase */}
           <MarkerF
             position={{
               lat: listing.geolocation.lat,
@@ -210,8 +204,9 @@ const ViewLocation = () => {
           />
         </GoogleMap>
         <p className="title">Book rooms</p>
-
+        {/* Form */}
         <form onSubmit={onSubmit} className="flex flex-col">
+          {/* This input is hidden, but is used for determining the dates the user is selected and then later saves to a variable to go into firebase */}
           <input
             id="dateRange"
             className="hidden"

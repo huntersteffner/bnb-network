@@ -8,13 +8,16 @@ import {
 } from 'firebase/storage'
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { db } from '../firebase.config'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import Loading from '../components/Loading'
 
 const CreateLocation = () => {
+  // This is to determine if browsers are set to geolocate
   const [geolocationEnabled, setGeolocationEnabled] = useState(true)
+  // Loading state
   const [loading, setLoading] = useState(false)
+  // Form data
   const [formData, setFormData] = useState({
     type: 'house',
     name: '',
@@ -29,6 +32,7 @@ const CreateLocation = () => {
     longitude: 0,
   })
 
+  // Destructuring for use in form
   const {
     type,
     name,
@@ -46,8 +50,8 @@ const CreateLocation = () => {
   const auth = getAuth()
   const navigate = useNavigate()
   const isMounted = useRef(true)
-  const params = useParams()
 
+  // Determines of user is logged in
   useEffect(() => {
     if (isMounted) {
       onAuthStateChanged(auth, (user) => {
@@ -57,6 +61,7 @@ const CreateLocation = () => {
             userRef: user.uid,
           })
         } else {
+          // If user is not logged, he/she is redirected to login page.
           navigate('/login')
         }
       })
@@ -68,7 +73,9 @@ const CreateLocation = () => {
     // eslint=disable-next-line react-hooks/exhaustive-deps
   }, [isMounted])
 
+  // This function will run on every keystroke that is entered in the form.
   const onChange = (e) => {
+    // For true or false questions, this boolean is used
     let boolean = null
     if (e.target.value === 'true') {
       boolean = true
@@ -77,7 +84,7 @@ const CreateLocation = () => {
       boolean = false
     }
 
-    // Files
+    // If the input is a file
 
     if (e.target.files) {
       setFormData((prevState) => ({
@@ -94,19 +101,23 @@ const CreateLocation = () => {
     }
   }
 
+  // When user submits the form
   const onSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
 
+    // Calling variables for further use later
     let geolocation = {}
     let location
 
+    // There can only be six images
     if (images.length > 6) {
       setLoading(false)
       alert('Max 6 images')
       return
     }
 
+    // API call for geocode api key
     if (geolocationEnabled) {
       const response = await fetch(
         `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.REACT_APP_GEOCODE_API_KEY}`
@@ -114,16 +125,17 @@ const CreateLocation = () => {
 
       const data = await response.json()
 
-      console.log(data)
-
+      // Setting latitude and longitude
       geolocation.lat = data.results[0]?.geometry.location.lat ?? 0
       geolocation.lng = data.results[0]?.geometry.location.lng ?? 0
 
+      // Need a valid entry
       location =
         data.status === 'ZERO_RESULTS'
           ? undefined
           : data.results[0]?.formatted_address
 
+      // Location is undefined
       if (location === undefined || location.includes('undefined')) {
         setLoading(false)
         alert('Please enter valid address')
@@ -135,15 +147,18 @@ const CreateLocation = () => {
       geolocation.lng = longitude
     }
 
+    // Storing an image
     const storeImg = async (image) => {
       return new Promise((res, rej) => {
         const storage = getStorage()
+        // Creating file name for image
         const fileName = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`
 
         const storageRef = ref(storage, 'images/' + fileName)
 
         const uploadImages = uploadBytesResumable(storageRef, image)
 
+        // Uploading image
         uploadImages.on(
           'state_changed',
           (snapshot) => {
@@ -175,6 +190,7 @@ const CreateLocation = () => {
       })
     }
 
+    // Image urls for firebase
     const imgUrls = await Promise.all(
       [...images].map((image) => storeImg(image))
     ).catch(() => {
@@ -182,6 +198,7 @@ const CreateLocation = () => {
       alert('Images not uploaded')
       return
     })
+    // Duplicate to prepare for push of new information
     const formDataDuplicate = {
       ...formData,
       imgUrls,
@@ -193,6 +210,7 @@ const CreateLocation = () => {
     delete formDataDuplicate.images
     delete formDataDuplicate.address
 
+    // Add new information to firebase
     const docRef = await addDoc(collection(db, 'listings'), formDataDuplicate)
 
     setLoading(false)
@@ -205,15 +223,17 @@ const CreateLocation = () => {
 
   return (
     <div className="container mx-auto">
+      {/* Form */}
       <form
         onSubmit={onSubmit}
         className="flex flex-col justify-center items-center m-3 space-y-2"
       >
         <div className="flex flex-col flex-wrap justify-center items-center w-full">
           <label className="label text-3xl">Type of Location</label>
-          <div className="flex flex-col   w-full space-y-2 lg:flex-row lg:space-y-0 lg:flex-wrap lg:justify-center lg:items-center">
+          <div className="flex flex-col  w-full space-y-2 lg:flex-row lg:space-y-0 lg:flex-wrap lg:justify-center lg:items-center">
             <button
               type="button"
+              // Button changes color depending on which is selected. Same for other buttons
               className={`lg:w-1/4 m-1 ${
                 type === 'house' ? 'btn btn-secondary' : 'btn btn-warning'
               }`}
@@ -309,6 +329,7 @@ const CreateLocation = () => {
         <div className="input-div">
           <label className="label text-3xl">Host Present: </label>
           <div className="flex flex-col justify-center w-full space-y-1">
+            {/* Buttons change color depending on whether or not yes or no is selected. Same for other buttons*/}
             <button
               class={
                 hostPresent
@@ -408,7 +429,7 @@ const CreateLocation = () => {
         </div>
         <div className="w-full grid grid-cols-1 md:grid-cols-2">
           <label className="label mx-auto text-center text-3xl md:mx-0">
-            Images:
+            Images (max 6):
           </label>
           <input
             className="file-input file-input-bordered file-input-warning w-full mx-auto max-w-xs"

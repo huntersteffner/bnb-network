@@ -7,8 +7,6 @@ import {
   query,
   where,
   orderBy,
-  limit,
-  startAfter,
 } from 'firebase/firestore'
 import { db } from '../firebase.config'
 import Loading from '../components/Loading'
@@ -16,15 +14,16 @@ import Loading from '../components/Loading'
 const ExploreResults = () => {
   const [listings, setListings] = useState(null)
   const [loading, setLoading] = useState(true)
-  // const [prevFetchedListing, setPrevFetchedListing] = useState(null)
 
   const params = useParams()
 
+  // Fetches all locations that match what the page is specified for
   useEffect(() => {
     const fetchListings = async () => {
       try {
         const listingsData = collection(db, 'listings')
 
+        // The params are used to specify that only locations that match what the page is for are selected
         const q = query(
           listingsData,
           where('type', '==', params.locationType),
@@ -34,6 +33,7 @@ const ExploreResults = () => {
         const queryData = await getDocs(q)
         let listings = []
 
+        // data is pushed to listings
         queryData.forEach((doc) => {
           return listings.push({
             id: doc.id,
@@ -41,6 +41,7 @@ const ExploreResults = () => {
           })
         })
 
+        // listings state is updated
         setListings(listings)
         setLoading(false)
       } catch (error) {
@@ -59,6 +60,7 @@ const ExploreResults = () => {
           params.locationType.slice(1)}
       </h1>
       <div>
+        {/* After it's done loading, it maps every state that is pulled */}
         {loading ? (
           <Loading />
         ) : listings && listings.length > 0 ? (
@@ -81,6 +83,7 @@ const ExploreResults = () => {
             ))}
           </>
         ) : (
+          // If no locations have been created for this category, it displays this.
           <h2 className="text-3xl">No locations have been created yet.</h2>
         )}
       </div>

@@ -16,7 +16,7 @@ const Carousel = () => {
   const [listings, setListings] = useState(null)
 
   const navigate = useNavigate()
-
+  // Selects five most recent locations
   useEffect(() => {
     const fetchListings = async () => {
       const locationsRef = collection(db, 'listings')
@@ -50,21 +50,27 @@ const Carousel = () => {
   return (
     listings && (
       <>
-
-      <Swiper slidesPerView={1.1} modules={[Navigation]} pagination={{clickable: true}}>
-        {listings.map(({data,id}) => (
-          <SwiperSlide key={id} onClick={()=> navigate(`/view-location/${id}`)}>
-            <div style={{
-              background: `url(${data.imgUrls[0]}) center no-repeat`,
-              backgroundSize: 'cover',
-              height: "50vw"
-            }}>
-              
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-        
+        {/* Map first image in array for each of the five most recent locations */}
+        <Swiper
+          slidesPerView={1.1}
+          modules={[Navigation]}
+          pagination={{ clickable: true }}
+        >
+          {listings.map(({ data, id }) => (
+            <SwiperSlide
+              key={id}
+              onClick={() => navigate(`/view-location/${id}`)}
+            >
+              <div
+                style={{
+                  background: `url(${data.imgUrls[0]}) center no-repeat`,
+                  backgroundSize: 'cover',
+                  height: '50vw',
+                }}
+              ></div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </>
     )
   )

@@ -46,6 +46,7 @@ const Navbar = () => {
       </div>
       <div className="navbar-center">
         <div className='flex'>
+          {/* Pulled from footer */}
           <svg
             width="50"
             height="50"
