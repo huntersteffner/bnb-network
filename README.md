@@ -35,8 +35,11 @@ MIT License
 
 ## Future Development
 -Payment functionality
+
 -Users cannot double book trips to the same location on the same days
+
 -Add more login methodologies such as Google OAuth or SMS verification
+
 -Add messaging system
 
 ## Questions
