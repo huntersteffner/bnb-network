@@ -20,6 +20,9 @@ To start the React Server you must run:
 npm start
 ```
 
+## Usage
+This is a Full Stack Application and you will be able to access the Location Exploration pages without being signed in. If you want to access the Location Detail pages to book a stay at a location, you will need to register or sign up. Each user will have his/her own profile page. Users can both book stays at Bnb Locations, or post their own properties that other users can make bookings on.
+
 
 ## Screenshot
 
@@ -29,6 +32,12 @@ npm start
 ## Contribution
 
 MIT License
+
+## Future Development
+-Payment functionality
+-Users cannot double book trips to the same location on the same days
+-Add more login methodologies such as Google OAuth or SMS verification
+-Add messaging system
 
 ## Questions
 
