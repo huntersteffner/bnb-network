@@ -10,10 +10,12 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
 import 'swiper/css/a11y'
+import React from 'react'
+import { Listing } from '../types'
 
 const Carousel = () => {
   const [loading, setLoading] = useState(true)
-  const [listings, setListings] = useState(null)
+  const [listings, setListings] = useState<Listing[] | null>(null)
 
   const navigate = useNavigate()
   // Selects five most recent locations
@@ -23,7 +25,7 @@ const Carousel = () => {
       const q = query(locationsRef, orderBy('timestamp', 'desc'), limit(5))
       const queryData = await getDocs(q)
 
-      let listings = []
+      let listings: Listing[] = []
 
       queryData.forEach((doc) => {
         return listings.push({
@@ -43,7 +45,7 @@ const Carousel = () => {
     return <Loading />
   }
 
-  if (listings.length === 0) {
+  if (listings && listings.length === 0) {
     return <></>
   }
 

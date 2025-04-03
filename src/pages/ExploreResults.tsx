@@ -10,11 +10,13 @@ import {
 } from 'firebase/firestore'
 import { db } from '../firebase.config'
 import Loading from '../components/Loading'
+import React from 'react'
+import { Listing } from '../types'
 
 const ExploreResults = () => {
-  const [listings, setListings] = useState(null)
+  const [listings, setListings] = useState<Listing[] | null>(null)
   const [loading, setLoading] = useState(true)
-
+  
   const params = useParams()
 
   // Fetches all locations that match what the page is specified for
@@ -31,7 +33,7 @@ const ExploreResults = () => {
         )
 
         const queryData = await getDocs(q)
-        let listings = []
+        let listings: Listing[] = []
 
         // data is pushed to listings
         queryData.forEach((doc) => {
@@ -40,6 +42,8 @@ const ExploreResults = () => {
             data: doc.data(),
           })
         })
+
+        console.log(listings)
 
         // listings state is updated
         setListings(listings)
@@ -56,8 +60,10 @@ const ExploreResults = () => {
     <div className="min-h-[80vh] container mx-auto flex flex-col items-center">
       <h1 className="title">
         Results for{' '}
-        {params.locationType.charAt(0).toUpperCase() +
-          params.locationType.slice(1)}
+        {params?.locationType && (
+          params.locationType.charAt(0).toUpperCase() +
+          params.locationType.slice(1)
+        )}
       </h1>
       <div>
         {/* After it's done loading, it maps every state that is pulled */}
@@ -65,7 +71,7 @@ const ExploreResults = () => {
           <Loading />
         ) : listings && listings.length > 0 ? (
           <>
-            {listings.map((listing, index) => (
+            {listings.map((listing: Listing, index: number) => (
               <div className="explore-card">
                 <p className="card-title">{listing.data.name}</p>
                 <div className="card-body">
