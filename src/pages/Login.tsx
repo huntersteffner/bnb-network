@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { SyntheticEvent, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import React from 'react'
 
 const Login = () => {
   const navigate = useNavigate()
@@ -13,14 +14,14 @@ const Login = () => {
   const { email, password } = formData
 
   // Runs on every keystroke in the login form
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.id]: e.target.value,
     }))
   }
   // Runs when user hits login
-  const onSubmit = async (e) => {
+  const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
 
     // Confirms if credentials match

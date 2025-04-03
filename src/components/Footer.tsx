@@ -1,3 +1,5 @@
+import React from "react"
+
 const Footer = () => {
   // JSX from https://daisyui.com/components/footer/
   return (

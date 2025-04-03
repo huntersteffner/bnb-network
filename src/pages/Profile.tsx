@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import { getAuth } from 'firebase/auth'
+import { Auth, getAuth } from 'firebase/auth'
 import {
   collection,
   getDocs,
@@ -9,17 +9,19 @@ import {
   orderBy,
 } from 'firebase/firestore'
 import { db } from '../firebase.config'
+import { History, Listing, ProfileAuth } from '../types'
+import React from 'react'
 
 const Profile = () => {
   const navigate = useNavigate()
 
-  const auth = getAuth()
+  const auth: ProfileAuth | Auth = getAuth()
   const [loading, setLoading] = useState(true)
-  const [listings, setListings] = useState(null)
-  const [history, setHistory] = useState(null)
+  const [listings, setListings] = useState<Listing[] | null>(null)
+  const [history, setHistory] = useState<History[] | null>(null)
   const [formData, setFormData] = useState({
-    name: auth.currentUser.displayName,
-    email: auth.currentUser.email,
+    name: auth?.currentUser?.displayName,
+    email: auth?.currentUser?.email,
   })
 
   const { name, email } = formData
@@ -37,13 +39,13 @@ const Profile = () => {
 
       const q = query(
         listingsData,
-        where('userRef', '==', auth.currentUser.uid),
+        where('userRef', '==', auth?.currentUser?.uid),
         orderBy('timestamp', 'desc')
       )
 
       const queryData = await getDocs(q)
 
-      const listings = []
+      const listings: Listing[] = []
 
       queryData.forEach((doc) => {
         return listings.push({
@@ -57,7 +59,7 @@ const Profile = () => {
     }
 
     fetchListings()
-  }, [auth.currentUser.uid])
+  }, [auth?.currentUser?.uid])
   // Pulls trips that user has booked in the past
   useEffect(() => {
     const fetchListings = async () => {
@@ -65,13 +67,13 @@ const Profile = () => {
 
       const q = query(
         historyData,
-        where('customerId', '==', auth.currentUser.uid),
+        where('customerId', '==', auth?.currentUser?.uid),
         orderBy('timestamp', 'desc')
       )
 
       const queryData = await getDocs(q)
 
-      const history = []
+      const history: History[]  = []
 
       queryData.forEach((doc) => {
         return history.push({
@@ -80,12 +82,14 @@ const Profile = () => {
         })
       })
 
+      console.log(history)
+
       setHistory(history)
       setLoading(false)
     }
 
     fetchListings()
-  }, [auth.currentUser.uid])
+  }, [auth?.currentUser?.uid])
 
   return (
     <>
@@ -106,15 +110,15 @@ const Profile = () => {
             <div className="card-body">
               <p className="title">Most Recent Trip</p>
               {/* After loading, it shows the most recent trip user has been on with a link to see full history */}
-              {!loading && history?.length > 0 ? (
+              {!loading && history && history?.length > 0 ? (
                 <>
-                  <p className="text-2xl">{history[0].data.locationName}</p>
+                  <p className="text-2xl">{history[0]?.data?.locationName}</p>
                   <img
                     className="explore-link"
                     src={history[0].data.image}
                     alt="Last Booked Trip"
                   />
-                  <p className="text-2xl">{history[0].data.locationDates}</p>
+                  <p className="text-2xl">{history[0]?.data?.locationDates}</p>
                 </>
               ) : (
                 <>
@@ -140,7 +144,7 @@ const Profile = () => {
             </Link>
             <div className="card-body">
               {/* After loading, it shows every location the user has published, or it says that no locations have been published */}
-              {!loading && listings?.length > 0 ? (
+              {!loading && listings && listings?.length > 0 ? (
                 <>
                   {listings.map((listing, index) => (
                     <div className="bg-base-100">

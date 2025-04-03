@@ -1,12 +1,16 @@
-import { useState } from 'react'
+import { SyntheticEvent, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   getAuth,
   createUserWithEmailAndPassword,
   updateProfile,
+  User,
+  Auth,
 } from 'firebase/auth'
 import { db } from '../firebase.config'
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore'
+import React from 'react'
+import { CurrentUser, ProfileAuth } from '../types'
 
 const SignUp = () => {
   const navigate = useNavigate()
@@ -19,7 +23,7 @@ const SignUp = () => {
   const { name, email, password } = formData
 
   // Runs on every keystroke
-  const onChange = (e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.id]: e.target.value,
@@ -27,22 +31,24 @@ const SignUp = () => {
   }
 
   // When user hits sign up
-  const onSubmit = async (e) => {
+  const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
 
     // Generates user
     try {
-      const auth = getAuth()
+      const auth: ProfileAuth | Auth = getAuth()
+      // @ts-ignore
+      const authCurrentUser: CurrentUser = auth.currentUser
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       )
       const user = userCredential.user
-      updateProfile(auth.currentUser, {
+      updateProfile(authCurrentUser, {
         displayName: name,
       })
-      const formDataCopy = { ...formData }
+      const formDataCopy: any = { ...formData }
       delete formDataCopy.password
       formDataCopy.timestamp = serverTimestamp()
       await setDoc(doc(db, 'users', user.uid), formDataCopy)
