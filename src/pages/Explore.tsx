@@ -5,6 +5,7 @@ import condoLink from '../img/condo-link.jpg'
 import apartmentLink from '../img/apartment-link.jpg'
 import cabinLink from '../img/cabin-link.jpg'
 import roomLink from '../img/room-link.jpg'
+import React from 'react'
 
 const Explore = () => {
   return (
