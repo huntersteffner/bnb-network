@@ -9,7 +9,7 @@ import {
   orderBy,
 } from 'firebase/firestore'
 import { db } from '../firebase.config'
-import { History, Listing, ProfileAuth } from '../types'
+import { HistoryType, Listing, ProfileAuth } from '../types'
 import React from 'react'
 
 const Profile = () => {
@@ -18,7 +18,7 @@ const Profile = () => {
   const auth: ProfileAuth | Auth = getAuth()
   const [loading, setLoading] = useState(true)
   const [listings, setListings] = useState<Listing[] | null>(null)
-  const [history, setHistory] = useState<History[] | null>(null)
+  const [history, setHistory] = useState<HistoryType[] | null>(null)
   const [formData, setFormData] = useState({
     name: auth?.currentUser?.displayName,
     email: auth?.currentUser?.email,
@@ -73,7 +73,7 @@ const Profile = () => {
 
       const queryData = await getDocs(q)
 
-      const history: History[]  = []
+      const history: HistoryType[]  = []
 
       queryData.forEach((doc) => {
         return history.push({
@@ -82,7 +82,6 @@ const Profile = () => {
         })
       })
 
-      console.log(history)
 
       setHistory(history)
       setLoading(false)

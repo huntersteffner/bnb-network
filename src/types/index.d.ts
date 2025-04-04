@@ -1,5 +1,5 @@
 import { Auth, User, UserMetadata } from 'firebase/auth'
-import { DocumentData } from 'firebase/firestore'
+import { DocumentData, FieldValue } from 'firebase/firestore'
 
 export interface Listing {
   data: ListingData | DocumentData
@@ -24,8 +24,8 @@ export interface ListingData {
 }
 
 export interface GeoLocation {
-  lat: number
-  lng: number
+  lat?: number
+  lng?: number
 }
 
 export interface Timestamp {
@@ -61,7 +61,7 @@ export interface CurrentUser extends User {
   uid: string
 }
 
-export interface History {
+export interface HistoryType {
   data: HistoryData | DocumentData
   id: string
 }
@@ -77,3 +77,27 @@ export interface HistoryData {
   timestamp: Timestamp
   type: string
 }
+
+export interface BnbFormData {
+  type?: string
+  name?: string
+  bedrooms?: number
+  bathrooms?: number
+  hostPresent?: boolean
+  food?: boolean
+  address?: string
+  price?: number
+  images?: ImageBlob[]
+  latitude?: number
+  longitude?: number
+  userRef?: string
+  imgUrls?: ImageBlob[] | unknown
+  location?: string
+  geolocation?: GeoLocation
+  timestamp?: FieldValue
+}
+
+export interface ImageBlob extends Blob {
+  name: string
+}
+

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, SyntheticEvent } from 'react'
 import { GoogleMap, useLoadScript, MarkerF } from '@react-google-maps/api'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
@@ -7,6 +7,7 @@ import {
   addDoc,
   collection,
   serverTimestamp,
+  DocumentData,
 } from 'firebase/firestore'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { db } from '../firebase.config'
@@ -24,13 +25,15 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
 import 'swiper/css/a11y'
+import React from 'react'
+import { Listing, ListingData } from '../types'
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y])
 
 const ViewLocation = () => {
-  const [listing, setListing] = useState(null)
+  const [listing, setListing] = useState<ListingData | DocumentData | null>(null)
   const [loading, setLoading] = useState(true)
   // Date range for booking a trip
-  const [dateRangeForSubmit, setDateRangeForSubmit] = useState({})
+  const [dateRangeForSubmit, setDateRangeForSubmit] = useState<any>({})
 
   let currentUser = ''
   const { dateRange } = dateRangeForSubmit
@@ -44,13 +47,13 @@ const ViewLocation = () => {
   ])
 
   const navigate = useNavigate()
-  const params = useParams()
+  const params: {locationId?: string} = useParams()
   const auth = getAuth()
   const isMounted = useRef(true)
 
   // For google maps api key
   const {} = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GEOCODE_API_KEY,
+    googleMapsApiKey: process.env.REACT_APP_GEOCODE_API_KEY ? process.env.REACT_APP_GEOCODE_API_KEY : '',
   })
 
   // If user is not logged in, redirect to login page
@@ -82,14 +85,14 @@ const ViewLocation = () => {
     const prepareToPost = async () => {
       await setDateRangeForSubmit({
         locationDates: dateString,
-        locationAddress: listing.location,
-        customerId: auth.currentUser.uid,
-        image: listing.imgUrls[0],
+        locationAddress: listing?.location,
+        customerId: auth?.currentUser?.uid,
+        image: listing?.imgUrls[0],
         locationId: params.locationId,
-        locationName: listing.name,
+        locationName: listing?.name,
         timestamp: serverTimestamp(),
-        type: listing.type,
-        ownerId: listing.userRef,
+        type: listing?.type,
+        ownerId: listing?.userRef,
       })
     }
 
@@ -105,11 +108,11 @@ const ViewLocation = () => {
   // Pull location that matches location ID
   useEffect(() => {
     const fetchListing = async () => {
+      // @ts-ignore
       const docRef = doc(db, 'listings', params.locationId)
       const docData = await getDoc(docRef)
 
       if (docData.exists()) {
-        console.log(docData.data())
         setListing(docData.data())
         setLoading(false)
       }
@@ -122,7 +125,7 @@ const ViewLocation = () => {
   }
 
   // When you select to book location
-  const onSubmit = async (e) => {
+  const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
     setLoading(true)
 
@@ -136,8 +139,7 @@ const ViewLocation = () => {
   }
 
   // When you change the date range
-  const onChange = (e) => {
-    const input = document.getGetElementById('dateRange').value()
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
     setDateRangeForSubmit({
       locationDates: e.target.value,
@@ -148,7 +150,7 @@ const ViewLocation = () => {
     <>
       {/* It shows 1.05 so that users can see that there are other slides to view */}
       <Swiper slidesPerView={1.05} pagination={{ clickable: true }}>
-        {listing.imgUrls.map((url, index) => (
+        {listing?.imgUrls.map((url: string, index: number) => (
           <SwiperSlide key={index}>
             <div
               style={{
@@ -163,24 +165,24 @@ const ViewLocation = () => {
       </Swiper>
       <div className="flex flex-col justify-center items-center">
         <div className="explore-card">
-          <h1 className="title">{listing.name}</h1>
+          <h1 className="title">{listing?.name}</h1>
           <div className="card-body">
-            <p className="text-lg font-semibold">Address: {listing.location}</p>
-            <p className="text-lg font-semibold">${listing.price} per night</p>
+            <p className="text-lg font-semibold">Address: {listing?.location}</p>
+            <p className="text-lg font-semibold">${listing?.price} per night</p>
           </div>
         </div>
         <div className="explore-card">
           <div className="card-body">
             <h1 className="title">Details</h1>
-            <p className="text-lg font-semibold">{listing.bedrooms} Bedrooms</p>
+            <p className="text-lg font-semibold">{listing?.bedrooms} Bedrooms</p>
             <p className="text-lg font-semibold">
-              {listing.bathrooms} Bathrooms
+              {listing?.bathrooms} Bathrooms
             </p>
             <p className="text-lg font-semibold">
-              {listing.food ? 'Host will provide food' : 'No food provided'}
+              {listing?.food ? 'Host will provide food' : 'No food provided'}
             </p>
             <p className="text-lg font-semibold">
-              {listing.hostPresent
+              {listing?.hostPresent
                 ? 'Host will be onsite'
                 : 'Host will not be onsite'}
             </p>
@@ -190,16 +192,16 @@ const ViewLocation = () => {
         <GoogleMap
           zoom={10}
           center={{
-            lat: listing.geolocation.lat,
-            lng: listing.geolocation.lng,
+            lat: listing?.geolocation.lat,
+            lng: listing?.geolocation.lng,
           }}
           mapContainerClassName="w-full h-[50vh] md:h-[20vh] md:w-[50%]"
         >
           {/* Where the marker goes. It pulls lat and lng from firebase */}
           <MarkerF
             position={{
-              lat: listing.geolocation.lat,
-              lng: listing.geolocation.lng,
+              lat: listing?.geolocation.lat,
+              lng: listing?.geolocation.lng,
             }}
           />
         </GoogleMap>
@@ -218,7 +220,7 @@ const ViewLocation = () => {
             )}`}
           />
           <DateRange
-            onChange={(item) => {
+            onChange={(item: any) => {
               setRange([item.selection])
             }}
             editableDateInputs={true}

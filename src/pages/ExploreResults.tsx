@@ -43,7 +43,6 @@ const ExploreResults = () => {
           })
         })
 
-        console.log(listings)
 
         // listings state is updated
         setListings(listings)

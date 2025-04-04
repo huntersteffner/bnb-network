@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import Footer from './components/Footer'
 import Navbar from './components/Navbar'
-import Loading from './components/Loading'
 import Explore from './pages/Explore'
 import History from './pages/History'
 import EditLocation from './pages/EditLocation'
@@ -13,6 +12,7 @@ import RestrictedRoute from './components/RestrictedRoute'
 import CreateLocation from './pages/CreateLocation'
 import ExploreResults from './pages/ExploreResults'
 import ViewLocation from './pages/ViewLocation'
+import React from 'react'
 
 function App() {
   return (

@@ -1,8 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { HistoryData } from '../types'
+import { DocumentData } from 'firebase/firestore'
 
-const HistoryCard = ({ history, id }: {history: HistoryData, id: string}) => {
+const HistoryCard = ({ history, id }: {history: HistoryData | DocumentData, id: string}) => {
   // History Card info is passed by props
   return (
     <div className="card w-96 bg-base-100 shadow-xl lg:w-1/2">

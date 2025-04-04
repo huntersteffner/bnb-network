@@ -11,13 +11,14 @@ import {
 } from 'firebase/firestore'
 import Loading from '../components/Loading'
 import HistoryCard from '../components/HistoryCard'
+import React from 'react'
+import { HistoryType } from '../types'
 
 const History = () => {
-  const navigate = useNavigate()
 
   const auth = getAuth()
   const [loading, setLoading] = useState(true)
-  const [listings, setListings] = useState(null)
+  const [historyListings, setHistoryListings] = useState<HistoryType[] | null>(null)
 
   // Fetches previously booked trips
   useEffect(() => {
@@ -27,27 +28,27 @@ const History = () => {
       // It specifies to only book the trips that have booked by the current user
       const q = query(
         listingsData,
-        where('customerId', '==', auth.currentUser.uid),
+        where('customerId', '==', auth?.currentUser?.uid),
         orderBy('timestamp', 'desc')
       )
 
       const queryData = await getDocs(q)
 
-      const listings = []
+      const historyListings: HistoryType[] = []
 
       queryData.forEach((doc) => {
-        return listings.push({
+        return historyListings.push({
           id: doc.id,
           data: doc.data(),
         })
       })
 
-      setListings(listings)
+      setHistoryListings(historyListings)
       setLoading(false)
     }
 
     fetchListings()
-  }, [auth.currentUser.uid])
+  }, [auth?.currentUser?.uid])
 
   return (
     <div className='container mx-auto min-h-screen'>
@@ -56,11 +57,11 @@ const History = () => {
         {/* After it's done loading it either loads every location the logged in user has previously booked in the base, or it says that no trips have been booked */}
         {loading ? (
           <Loading />
-        ) : listings && listings.length > 0 ? (
+        ) : historyListings && historyListings.length > 0 ? (
           <>
-            {listings.map((listing) => (
+            {historyListings.map((historyListing: HistoryType) => (
               <>
-                <HistoryCard listing={listing.data} id={listing.id} key={listing.id} />
+                <HistoryCard history={historyListing.data} id={historyListing.id} key={historyListing.id} />
               </>
             ))}
           </>

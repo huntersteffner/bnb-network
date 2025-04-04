@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, SyntheticEvent, MouseEventHandler } from 'react'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import {
   getStorage,
@@ -11,6 +11,8 @@ import { db } from '../firebase.config'
 import { useNavigate } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import Loading from '../components/Loading'
+import React from 'react'
+import { BnbFormData, GeoLocation, ImageBlob } from '../types'
 
 const CreateLocation = () => {
   // This is to determine if browsers are set to geolocate
@@ -18,7 +20,7 @@ const CreateLocation = () => {
   // Loading state
   const [loading, setLoading] = useState(false)
   // Form data
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<BnbFormData>({
     type: 'house',
     name: '',
     bedrooms: 1,
@@ -27,7 +29,7 @@ const CreateLocation = () => {
     food: false,
     address: '',
     price: 0,
-    images: {},
+    images: [],
     latitude: 0,
     longitude: 0,
   })
@@ -73,15 +75,16 @@ const CreateLocation = () => {
     // eslint=disable-next-line react-hooks/exhaustive-deps
   }, [isMounted])
 
+
   // This function will run on every keystroke that is entered in the form.
-  const onChange = (e) => {
+  const onChange = (e: any) => {
     // For true or false questions, this boolean is used
-    let boolean = null
+    let hasTargetValue: boolean
     if (e.target.value === 'true') {
-      boolean = true
+      hasTargetValue = true
     }
     if (e.target.value === 'false') {
-      boolean = false
+      hasTargetValue = false
     }
 
     // If the input is a file
@@ -92,26 +95,26 @@ const CreateLocation = () => {
         images: e.target.files,
       }))
     }
-    // Text/boolean/numbers
+    // Text/hasTargetValue/numbers
     if (!e.target.files) {
       setFormData((prevState) => ({
         ...prevState,
-        [e.target.id]: boolean ?? e.target.value,
+        [e.target.id]: hasTargetValue ?? e.target.value,
       }))
     }
   }
 
   // When user submits the form
-  const onSubmit = async (e) => {
+  const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
     setLoading(true)
 
     // Calling variables for further use later
-    let geolocation = {}
+    let geolocation: GeoLocation = {}
     let location
 
     // There can only be six images
-    if (images.length > 6) {
+    if (images && images.length > 6) {
       setLoading(false)
       alert('Max 6 images')
       return
@@ -139,7 +142,6 @@ const CreateLocation = () => {
       if (location === undefined || location.includes('undefined')) {
         setLoading(false)
         alert('Please enter valid address')
-        console.log(location)
         return
       }
     } else {
@@ -148,11 +150,11 @@ const CreateLocation = () => {
     }
 
     // Storing an image
-    const storeImg = async (image) => {
+    const storeImg = async (image: ImageBlob) => {
       return new Promise((res, rej) => {
         const storage = getStorage()
         // Creating file name for image
-        const fileName = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`
+        const fileName = `${auth?.currentUser?.uid}-${image.name}-${uuidv4()}`
 
         const storageRef = ref(storage, 'images/' + fileName)
 
@@ -191,15 +193,15 @@ const CreateLocation = () => {
     }
 
     // Image urls for firebase
-    const imgUrls = await Promise.all(
-      [...images].map((image) => storeImg(image))
+    const imgUrls: ImageBlob[] | unknown = await Promise.all(
+      [...images as ImageBlob[]].map((image: ImageBlob) => storeImg(image))
     ).catch(() => {
       setLoading(false)
       alert('Images not uploaded')
-      return
+      return 
     })
     // Duplicate to prepare for push of new information
-    const formDataDuplicate = {
+    const formDataDuplicate: BnbFormData = {
       ...formData,
       imgUrls,
       geolocation,
@@ -331,27 +333,27 @@ const CreateLocation = () => {
           <div className="flex flex-col justify-center w-full space-y-1">
             {/* Buttons change color depending on whether or not yes or no is selected. Same for other buttons*/}
             <button
-              class={
+              className={
                 hostPresent
                   ? 'btn btn-secondary w-full'
                   : 'btn btn-warning w-full'
               }
               type="button"
               id="hostPresent"
-              value={true}
+              value={'true'}
               onClick={onChange}
             >
               Yes
             </button>
             <button
-              class={
+              className={
                 !hostPresent
                   ? 'btn btn-secondary w-full'
                   : 'btn btn-warning w-full'
               }
               type="button"
               id="hostPresent"
-              value={false}
+              value={'false'}
               onClick={onChange}
             >
               No
@@ -362,19 +364,19 @@ const CreateLocation = () => {
           <label className="label text-3xl">Food Provided: </label>
           <div className="flex flex-col justify-center w-full space-y-1">
             <button
-              class={food ? 'btn btn-secondary' : 'btn btn-warning'}
+              className={food ? 'btn btn-secondary' : 'btn btn-warning'}
               type="button"
               id="food"
-              value={true}
+              value={'true'}
               onClick={onChange}
             >
               Yes
             </button>
             <button
-              class={!food ? 'btn btn-secondary' : 'btn btn-warning'}
+              className={!food ? 'btn btn-secondary' : 'btn btn-warning'}
               type="button"
               id="food"
-              value={false}
+              value={'false'}
               onClick={onChange}
             >
               No
@@ -386,7 +388,6 @@ const CreateLocation = () => {
           <textarea
             className="textarea textarea-bordered textarea-secondary"
             id="address"
-            type="text"
             value={address}
             onChange={onChange}
             required
@@ -434,7 +435,7 @@ const CreateLocation = () => {
           <input
             className="file-input file-input-bordered file-input-warning w-full mx-auto max-w-xs"
             type="file"
-            id={images}
+            id="images"
             onChange={onChange}
             max="6"
             accept=".jpg,.png,.jpeg"
